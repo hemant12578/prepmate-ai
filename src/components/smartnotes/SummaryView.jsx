@@ -1,0 +1,125 @@
+import { useState } from 'react'
+import { Sparkles, BookOpen, CheckSquare, Award, FileText, Loader2 } from 'lucide-react'
+
+export default function SummaryView({ summary, loading, onGenerate }) {
+  const [checkedKeys, setCheckedKeys] = useState({})
+
+  if (loading) {
+    return (
+      <div className="glass rounded-3xl p-12 text-center flex flex-col items-center justify-center animate-in">
+        <Loader2 className="animate-spin text-purple-400 mb-4" size={32} />
+        <p className="text-sm font-semibold text-white mb-1">Analyzing Document Structure...</p>
+        <p className="text-xs text-slate-400">Generating title, key takeaways, concept definitions, and study guide.</p>
+      </div>
+    )
+  }
+
+  if (!summary) {
+    return (
+      <div className="glass rounded-3xl p-10 text-center animate-in">
+        <BookOpen className="mx-auto mb-3 text-purple-400/60" size={36} />
+        <h3 className="text-lg font-bold text-white mb-1">No Summary Generated Yet</h3>
+        <p className="text-xs text-slate-400 mb-6">Click below to generate a comprehensive AI summary of your notes.</p>
+        <button
+          onClick={onGenerate}
+          className="btn-primary px-6 py-3 rounded-2xl text-xs font-semibold text-white inline-flex items-center gap-2 shadow-lg shadow-purple-500/20"
+        >
+          <Sparkles size={14} />
+          <span>Generate Summary Now</span>
+        </button>
+      </div>
+    )
+  }
+
+  const toggleCheck = (idx) => {
+    setCheckedKeys(prev => ({ ...prev, [idx]: !prev[idx] }))
+  }
+
+  return (
+    <div className="space-y-6 animate-in">
+      {/* Header Card */}
+      <div className="glass rounded-3xl p-7 border border-white/10 shadow-2xl relative overflow-hidden">
+        <div className="flex items-center justify-between mb-3">
+          <span className="text-xs font-semibold text-purple-400 uppercase tracking-wider flex items-center gap-1.5">
+            <Sparkles size={14} />
+            <span>AI Executive Summary</span>
+          </span>
+          {summary.difficulty && (
+            <span className="px-3 py-1 rounded-full text-xs font-semibold bg-purple-500/10 border border-purple-500/20 text-purple-300">
+              {summary.difficulty} Level
+            </span>
+          )}
+        </div>
+        <h2 className="text-2xl font-bold text-white mb-2">{summary.title || 'Document Summary'}</h2>
+        <p className="text-sm text-slate-300 italic leading-relaxed">{summary.oneLiner}</p>
+      </div>
+
+      {/* Key Takeaways */}
+      {Array.isArray(summary.keyPoints) && summary.keyPoints.length > 0 && (
+        <div className="glass rounded-3xl p-7 border border-white/10">
+          <h3 className="text-base font-bold text-white mb-4 flex items-center gap-2">
+            <CheckSquare className="text-emerald-400" size={18} />
+            <span>Key Takeaways & Core Findings</span>
+          </h3>
+          <div className="space-y-2.5">
+            {summary.keyPoints.map((point, idx) => (
+              <div
+                key={idx}
+                onClick={() => toggleCheck(idx)}
+                className={`p-3.5 rounded-2xl border transition-all cursor-pointer flex items-start gap-3 ${
+                  checkedKeys[idx]
+                    ? 'bg-emerald-500/10 border-emerald-500/30 text-slate-400 line-through'
+                    : 'bg-white/[0.02] border-white/[0.06] text-slate-200 hover:border-white/15'
+                }`}
+              >
+                <input
+                  type="checkbox"
+                  checked={!!checkedKeys[idx]}
+                  onChange={() => {}}
+                  className="mt-0.5 accent-emerald-500 rounded"
+                />
+                <span className="text-xs leading-relaxed">{point}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Concept Definition Pills */}
+      {Array.isArray(summary.mainConcepts) && summary.mainConcepts.length > 0 && (
+        <div className="glass rounded-3xl p-7 border border-white/10">
+          <h3 className="text-base font-bold text-white mb-4 flex items-center gap-2">
+            <Award className="text-amber-400" size={18} />
+            <span>Main Concepts & Definitions</span>
+          </h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {summary.mainConcepts.map((concept, idx) => {
+              const parts = concept.split(':')
+              const term = parts[0]
+              const def = parts.slice(1).join(':')
+              return (
+                <div key={idx} className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06]">
+                  <p className="text-xs font-bold text-purple-300 mb-1">{term}</p>
+                  <p className="text-xs text-slate-300 leading-relaxed">{def || concept}</p>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* Structured Study Guide */}
+      {summary.studyGuide && (
+        <div className="glass rounded-3xl p-7 border border-white/10">
+          <h3 className="text-base font-bold text-white mb-4 flex items-center gap-2">
+            <FileText className="text-blue-400" size={18} />
+            <span>Structured Study Guide</span>
+          </h3>
+          <div className="text-xs text-slate-300 leading-relaxed space-y-3 whitespace-pre-line">
+            {summary.studyGuide}
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}

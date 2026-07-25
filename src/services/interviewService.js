@@ -1,0 +1,192 @@
+const API_URL = 'https://openrouter.ai/api/v1/chat/completions'
+
+const MODELS = [
+  'openrouter/auto',
+  'meta-llama/llama-3.1-8b-instruct:free',
+  'google/gemma-2-9b-it:free',
+]
+
+function getHeaders() {
+  const headers = {
+    'Content-Type': 'application/json',
+    'HTTP-Referer': window.location.origin,
+    'X-Title': 'PrepMate AI Interview'
+  }
+  const key = import.meta.env.VITE_OPENROUTER_API_KEY
+  if (key) headers['Authorization'] = `Bearer ${key}`
+  return headers
+}
+
+async function callAI(prompt, attempt = 0) {
+  const model = MODELS[Math.min(attempt, MODELS.length - 1)]
+  const controller = new AbortController()
+  const timeout = setTimeout(() => controller.abort(), 25000)
+
+  try {
+    const res = await fetch(API_URL, {
+      method: 'POST',
+      headers: getHeaders(),
+      signal: controller.signal,
+      body: JSON.stringify({
+        model,
+        messages: [{ role: 'user', content: prompt }],
+        temperature: 0.7,
+        max_tokens: 1024,
+      })
+    })
+
+    clearTimeout(timeout)
+
+    if (!res.ok) {
+      if (attempt < MODELS.length - 1) return callAI(prompt, attempt + 1)
+      throw new Error(`API error ${res.status}`)
+    }
+
+    const data = await res.json()
+    const content = data.choices?.[0]?.message?.content
+    if (!content) {
+      if (attempt < MODELS.length - 1) return callAI(prompt, attempt + 1)
+      throw new Error('Empty response from AI')
+    }
+
+    let cleaned = content.trim()
+    if (cleaned.startsWith('```')) {
+      cleaned = cleaned.replace(/^```(?:json)?\n?/, '').replace(/\n?```$/, '')
+    }
+
+    try {
+      return JSON.parse(cleaned)
+    } catch (e) {
+      const jsonMatch = cleaned.match(/\{[\s\S]*\}/)
+      if (jsonMatch) return JSON.parse(jsonMatch[0])
+      throw new Error('Could not parse AI response as JSON')
+    }
+  } catch (err) {
+    clearTimeout(timeout)
+    if (attempt < MODELS.length - 1) return callAI(prompt, attempt + 1)
+    throw err
+  }
+}
+
+export async function generateInterviewQuestion(config, questionNum, totalNum) {
+  const { category, school, college, job, pressureMode } = config
+
+  let contextStr = ''
+  if (category === 'school') {
+    contextStr = `School Viva for ${school.board} ${school.grade}, Subject: ${school.subject}, Topic: ${school.topic}, Style: ${school.vivaStyle}`
+  } else if (category === 'college') {
+    contextStr = `College Entrance Interview for ${college.targetType}, Round: ${college.round}, Focus: ${college.focusArea}`
+  } else {
+    contextStr = `Job Interview for ${job.role} (${job.expLevel}), Round: ${job.round}, Company: ${job.companyType}`
+  }
+
+  const prompt = `You are a professional interviewer simulating a real interview.
+Interview Context: ${contextStr}
+Question ${questionNum} of ${totalNum}.
+Pressure Mode: ${pressureMode}
+
+Generate 1 realistic interview question.
+Return ONLY JSON:
+{
+  "question": "your interview question text",
+  "isHrQuestion": boolean,
+  "options": null
+}`
+
+  const result = await callAI(prompt)
+  return {
+    question: result.question || `Tell me about your experience and background related to ${category === 'job' ? job.role : 'this subject'}.`,
+    isHrQuestion: !!result.isHrQuestion || (category === 'job' && job.round === 'HR'),
+    options: null
+  }
+}
+
+export async function evaluateInterviewAnswer(config, question, userAnswer, isHrQuestion = false) {
+  const { category, job, pressureMode } = config
+
+  const prompt = `You are a strict but fair corporate interviewer evaluating a candidate's answer.
+Category: ${category}
+Question: ${question}
+Candidate's Answer: ${userAnswer}
+Is HR Behavioral Question: ${isHrQuestion}
+Pressure Mode: ${pressureMode}
+
+Return ONLY JSON:
+{
+  "overallScore": number (1-10),
+  "contentAccuracy": number (1-10),
+  "communication": number (1-10),
+  "structureClarity": number (1-10),
+  "whatImpressed": "string (what impressed the interviewer)",
+  "whatWeakened": "string (what weakened the answer)",
+  "idealAnswerStructure": "string (how a top candidate would answer this)",
+  "interviewTip": "string (actionable interview tip)",
+  "starCheck": ${isHrQuestion ? '{"situation": true, "task": true, "action": false, "result": false}' : 'null'},
+  "verdictLine": "string (1-sentence interviewer verbal feedback)"
+}`
+
+  const result = await callAI(prompt)
+  return {
+    overallScore: Math.min(10, Math.max(1, Number(result.overallScore) || 6)),
+    contentAccuracy: Math.min(10, Math.max(1, Number(result.contentAccuracy) || 7)),
+    communication: Math.min(10, Math.max(1, Number(result.communication) || 7)),
+    structureClarity: Math.min(10, Math.max(1, Number(result.structureClarity) || 6)),
+    whatImpressed: result.whatImpressed || 'Clear communication and good confidence.',
+    whatWeakened: result.whatWeakened || 'Could provide more specific concrete examples.',
+    idealAnswerStructure: result.idealAnswerStructure || 'Start with a direct high-level summary, follow with 2 key supporting details, and conclude with the outcome.',
+    interviewTip: result.interviewTip || 'Use the STAR format (Situation, Task, Action, Result) for structured responses.',
+    starCheck: result.starCheck || (isHrQuestion ? { situation: true, task: true, action: false, result: false } : null),
+    verdictLine: result.verdictLine || 'Good start, but needs more structured depth.'
+  }
+}
+
+export async function generateInterviewSummary(config, questionsAndScores) {
+  const avg = questionsAndScores.reduce((s, q) => s + (q.overallScore || q.score || 6), 0) / questionsAndScores.length
+  const avgContent = questionsAndScores.reduce((s, q) => s + (q.contentAccuracy || 7), 0) / questionsAndScores.length
+  const avgComm = questionsAndScores.reduce((s, q) => s + (q.communication || 7), 0) / questionsAndScores.length
+  const avgStruct = questionsAndScores.reduce((s, q) => s + (q.structureClarity || 6), 0) / questionsAndScores.length
+  const overallScore = Math.round(avg * 10)
+
+  let hiringVerdict = 'Hire'
+  if (overallScore >= 80) hiringVerdict = 'Strong Hire'
+  else if (overallScore >= 65) hiringVerdict = 'Hire'
+  else if (overallScore >= 50) hiringVerdict = 'Maybe'
+  else hiringVerdict = 'Not Yet'
+
+  const prompt = `You are a senior hiring manager. Summarize candidate interview results:
+Config: ${JSON.stringify(config)}
+Session Scores: ${JSON.stringify(questionsAndScores)}
+
+Return ONLY JSON:
+{
+  "strengths": ["tag1", "tag2", "tag3"],
+  "improvements": ["tag1", "tag2", "tag3"],
+  "finalVerdict": "2-sentence executive hiring debrief verdict"
+}`
+
+  try {
+    const res = await callAI(prompt)
+    return {
+      overallScore,
+      hiringVerdict,
+      metrics: {
+        content: Math.round(avgContent * 10),
+        communication: Math.round(avgComm * 10),
+        structure: Math.round(avgStruct * 10),
+        confidence: Math.round(((avgComm + avgStruct) / 2) * 10)
+      },
+      strengths: Array.isArray(res.strengths) ? res.strengths : ['Technical knowledge', 'Communication', 'Composure'],
+      improvements: Array.isArray(res.improvements) ? res.improvements : ['Structure answers with STAR', 'Elaborate on results', 'Be concise'],
+      finalVerdict: res.finalVerdict || `Candidate demonstrated good potential. With more structured answers and specific metrics, they will perform strongly in live interviews.`
+    }
+  } catch (e) {
+    return {
+      overallScore,
+      hiringVerdict,
+      metrics: { content: 75, communication: 70, structure: 65, confidence: 70 },
+      strengths: ['Domain Awareness', 'Communication Clarity', 'Confidence'],
+      improvements: ['Structure with STAR method', 'Provide concrete results', 'Elaborate on technical trade-offs'],
+      finalVerdict: 'Solid interview performance overall. Keep refining your structured answers.'
+    }
+  }
+}
