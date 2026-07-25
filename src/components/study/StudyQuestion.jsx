@@ -18,9 +18,18 @@ export default function StudyQuestion({ questionData, currentQ, totalQ, onSubmit
     }
   }, [transcript, isListening])
 
+  useEffect(() => {
+    setSelectedOption('')
+    setTextAnswer('')
+    setShowHint(false)
+    setHintUsed(false)
+  }, [currentQ, questionData])
+
   if (!questionData) return null
 
   const { question, format, options, hint, difficulty } = questionData
+  const isMcq = (format === 'mcq' || (Array.isArray(options) && options.length > 0)) && format !== 'true_false'
+  const isTrueFalse = format === 'true_false'
 
   const handleToggleMic = () => {
     if (isListening) {
@@ -36,7 +45,7 @@ export default function StudyQuestion({ questionData, currentQ, totalQ, onSubmit
     e?.preventDefault()
     if (isListening) stopListening()
 
-    const finalAns = format === 'mcq' || format === 'true_false' ? selectedOption : textAnswer
+    const finalAns = isMcq || isTrueFalse ? selectedOption : textAnswer
     if (!finalAns.trim()) return
 
     onSubmit({
@@ -67,7 +76,7 @@ export default function StudyQuestion({ questionData, currentQ, totalQ, onSubmit
         <h2 className="text-xl font-semibold text-white leading-relaxed mb-6">{question}</h2>
 
         {/* MCQ 2x2 Grid */}
-        {format === 'mcq' && Array.isArray(options) && (
+        {isMcq && Array.isArray(options) && (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
             {options.map((opt, i) => (
               <button
@@ -88,7 +97,7 @@ export default function StudyQuestion({ questionData, currentQ, totalQ, onSubmit
         )}
 
         {/* True / False Format */}
-        {format === 'true_false' && (
+        {isTrueFalse && (
           <div className="grid grid-cols-2 gap-4 mb-6">
             {['True ✓', 'False ✗'].map((val) => (
               <button
@@ -107,8 +116,8 @@ export default function StudyQuestion({ questionData, currentQ, totalQ, onSubmit
           </div>
         )}
 
-        {/* Text Area for Short Answer / Mixed */}
-        {(format === 'subjective' || format === 'mixed' || (!options && format !== 'true_false')) && (
+        {/* Text Area for Short Answer */}
+        {!isMcq && !isTrueFalse && (
           <div className="relative mb-6">
             <textarea
               value={textAnswer}
@@ -159,7 +168,7 @@ export default function StudyQuestion({ questionData, currentQ, totalQ, onSubmit
         {/* Submit Button */}
         <button
           onClick={handleFormSubmit}
-          disabled={format === 'mcq' || format === 'true_false' ? !selectedOption : !textAnswer.trim()}
+          disabled={isMcq || isTrueFalse ? !selectedOption : !textAnswer.trim()}
           className="w-full btn-primary py-3 rounded-2xl text-xs font-bold text-white flex items-center justify-center gap-2 shadow-lg shadow-purple-500/20 disabled:opacity-40"
         >
           <span>Submit Answer</span>

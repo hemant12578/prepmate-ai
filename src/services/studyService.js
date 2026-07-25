@@ -20,7 +20,7 @@ function getHeaders() {
 async function callAI(prompt, attempt = 0) {
   const model = MODELS[Math.min(attempt, MODELS.length - 1)]
   const controller = new AbortController()
-  const timeout = setTimeout(() => controller.abort(), 6000) // Fast 6-second timeout per attempt
+  const timeout = setTimeout(() => controller.abort(), 25000) // 25-second timeout per attempt
 
   try {
     const res = await fetch(API_URL, {
@@ -71,6 +71,10 @@ async function callAI(prompt, attempt = 0) {
 export async function generateStudyQuestion(config, questionNum, totalNum) {
   const { board = 'CBSE', grade = 'Class 10', subject = 'Science', topic = 'General', format = 'mixed', difficulty = 'Medium', pyqMode, isExamMode, uploadedDocText, ncertSyllabusContext } = config || {}
 
+  const effectiveFormat = format === 'mixed'
+    ? (questionNum % 2 === 1 ? 'mcq' : 'subjective')
+    : format
+
   let contextBlock = ''
   if (uploadedDocText) {
     contextBlock += `\nRefer directly to this uploaded document / PYQ paper content to formulate the question:\n"${uploadedDocText.slice(0, 1500)}"\n`
@@ -86,19 +90,17 @@ export async function generateStudyQuestion(config, questionNum, totalNum) {
     ? 'Format this question strictly in the style of previous year board examination questions.'
     : ''
 
-  const formatInstruction = format === 'mcq'
-    ? 'Provide 4 options: A, B, C, D and explicitly mention options in the JSON.'
-    : format === 'true_false'
+  const formatInstruction = effectiveFormat === 'mcq'
+    ? 'Provide 4 options: A, B, C, D and explicitly mention options in the JSON array: ["A) ...", "B) ...", "C) ...", "D) ..."].'
+    : effectiveFormat === 'true_false'
     ? 'Provide a True or False question.'
-    : format === 'subjective'
-    ? 'Provide a conceptual short answer question.'
-    : 'Choose the best format (MCQ, True/False, or Short Answer).'
+    : 'Provide a conceptual short answer question.'
 
   const prompt = `You are an expert study coach for ${board} ${grade}.
 Generate 1 study question for:
 Subject: ${subject}
 Topic/Chapter: ${topic}
-Format: ${format} (${formatInstruction})
+Format: ${effectiveFormat} (${formatInstruction})
 Difficulty: ${difficulty}
 Question ${questionNum} of ${totalNum}.
 ${pyqInstruction}
@@ -107,26 +109,50 @@ ${contextBlock}
 Return ONLY a JSON object in this exact format:
 {
   "question": "question text here",
-  "format": "${format}",
+  "format": "${effectiveFormat}",
   "options": ["A) Option 1", "B) Option 2", "C) Option 3", "D) Option 4"],
   "hint": "a helpful 1-sentence hint"
 }`
 
   try {
     const result = await callAI(prompt)
+    let processedOptions = null
+    if (Array.isArray(result.options)) {
+      processedOptions = result.options.map(opt => typeof opt === 'string' ? opt : JSON.stringify(opt))
+    } else if (typeof result.options === 'object' && result.options !== null) {
+      processedOptions = Object.entries(result.options).map(([k, v]) => `${k}) ${v}`)
+    }
+
+    if (effectiveFormat === 'mcq' && (!processedOptions || processedOptions.length < 2)) {
+      processedOptions = [
+        `A) Primary mechanism of ${topic}`,
+        `B) Secondary process of ${topic}`,
+        `C) Environmental external factor`,
+        `D) All of the above`
+      ]
+    }
+
     return {
-      question: result.question || `Explain the core concepts of ${topic}.`,
-      format: result.format || format,
-      options: Array.isArray(result.options) ? result.options : null,
-      hint: result.hint || 'Think about the core definitions and formulas.',
+      question: result.question || `What is a key principle of ${topic} in ${subject}?`,
+      format: result.format || effectiveFormat,
+      options: processedOptions,
+      hint: result.hint || 'Think about core textbook definitions.',
       difficulty: difficulty
     }
   } catch (e) {
-    // Fast fallback question
+    console.warn('Study question generation failed, using format-matching fallback:', e)
+    const isMcqFormat = effectiveFormat === 'mcq'
     return {
-      question: `What are the fundamental principles and key definitions of ${topic} in ${subject}?`,
-      format: 'subjective',
-      options: null,
+      question: isMcqFormat
+        ? `Which of the following best describes the core function of ${topic} in ${subject}?`
+        : `What are the fundamental principles and key definitions of ${topic} in ${subject}?`,
+      format: effectiveFormat,
+      options: isMcqFormat ? [
+        `A) Key biological/physical process governing ${topic}`,
+        `B) Secondary metabolic or structural component`,
+        `C) External environmental catalyst`,
+        `D) Non-essential auxiliary feature`
+      ] : null,
       hint: 'Recall the main formulas and textbook chapter definitions.',
       difficulty: difficulty
     }
