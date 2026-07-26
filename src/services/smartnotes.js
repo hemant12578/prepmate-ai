@@ -8,12 +8,14 @@ const MODELS = [
 ]
 
 function getHeaders() {
-  return {
-    'Authorization': `Bearer ${import.meta.env.VITE_OPENROUTER_API_KEY}`,
+  const headers = {
     'Content-Type': 'application/json',
-    'HTTP-Referer': window.location.origin,
+    'HTTP-Referer': typeof window !== 'undefined' ? window.location.origin : 'https://prepmate-ai.web.app',
     'X-Title': 'PrepMate AI Smart Notes'
   }
+  const key = import.meta.env.VITE_OPENROUTER_API_KEY
+  if (key) headers['Authorization'] = `Bearer ${key}`
+  return headers
 }
 
 async function callAI(prompt, systemPrompt = '', attempt = 0) {
