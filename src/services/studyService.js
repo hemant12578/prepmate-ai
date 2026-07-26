@@ -66,8 +66,17 @@ Return ONLY a JSON object in this exact format:
 
     return {
       question: result.question || `What is a key principle of ${topic} in ${subject}?`,
-      format: result.format || effectiveFormat,
-      options: processedOptions,
+      format: effectiveFormat,
+      options: effectiveFormat === 'mcq'
+        ? (processedOptions && processedOptions.length >= 2
+            ? processedOptions
+            : [
+                `A) Primary concept of ${topic}`,
+                `B) Secondary mechanism of ${topic}`,
+                `C) Auxiliary environmental factor`,
+                `D) All of the above`
+              ])
+        : (effectiveFormat === 'true_false' ? ['True ✓', 'False ✗'] : null),
       hint: result.hint || 'Think about core textbook definitions.',
       difficulty: difficulty
     }

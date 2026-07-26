@@ -27,9 +27,20 @@ export default function StudyQuestion({ questionData, currentQ, totalQ, onSubmit
 
   if (!questionData) return null
 
-  const { question, format, options, hint, difficulty } = questionData
-  const isMcq = (format === 'mcq' || (Array.isArray(options) && options.length > 0)) && format !== 'true_false'
+  const { question, format, options: rawOptions, hint, difficulty } = questionData
+  const isMcq = format === 'mcq' || (Array.isArray(rawOptions) && rawOptions.length > 0 && format !== 'true_false' && format !== 'subjective')
   const isTrueFalse = format === 'true_false'
+
+  const options = isMcq
+    ? (Array.isArray(rawOptions) && rawOptions.length >= 2
+        ? rawOptions
+        : [
+            'A) Primary concept & mechanism',
+            'B) Secondary process & structure',
+            'C) Environmental catalyst',
+            'D) All of the above'
+          ])
+    : rawOptions
 
   const handleToggleMic = () => {
     if (isListening) {

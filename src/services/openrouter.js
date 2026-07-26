@@ -68,8 +68,17 @@ Return ONLY a JSON object in this exact format, no other text:
     const result = await callAIJSON(prompt)
     return {
       question: result.question || 'Could not generate question',
-      format: result.format || effectiveFormat,
-      options: Array.isArray(result.options) ? result.options : null,
+      format: effectiveFormat,
+      options: effectiveFormat === 'mcq'
+        ? (Array.isArray(result.options) && result.options.length >= 2
+            ? result.options
+            : [
+                `A) Primary concept of ${topic}`,
+                `B) Secondary mechanism of ${topic}`,
+                `C) Auxiliary factor`,
+                `D) All of the above`
+              ])
+        : null,
       correctAnswer: result.correctAnswer || null,
       difficulty: result.difficulty || difficulty,
       hint: result.hint || '',
