@@ -123,7 +123,7 @@ Return ONLY a JSON object:
 Score should be 1-10.`
 
   try {
-    const result = await callAIJSON(prompt, { maxTokens: 512, timeout: 25000 })
+    const result = await callAIJSON(prompt, { maxTokens: 400, timeout: 7000 })
     return {
       score: Math.min(10, Math.max(1, Number(result.score) || 7)),
       whatYouGotRight: result.whatYouGotRight || 'Good effort on addressing the question!',

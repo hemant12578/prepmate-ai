@@ -75,7 +75,7 @@ Return ONLY JSON:
 }`
 
   try {
-    const result = await callAIJSON(prompt, { timeout: 25000 })
+    const result = await callAIJSON(prompt, { maxTokens: 400, timeout: 7000 })
     return {
       overallScore: Math.min(10, Math.max(1, Number(result.overallScore) || 6)),
       contentAccuracy: Math.min(10, Math.max(1, Number(result.contentAccuracy) || 7)),

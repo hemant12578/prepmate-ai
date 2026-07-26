@@ -48,7 +48,7 @@ async function callPollinationsAI(prompt, systemPrompt = '') {
  * @param {number} opts.timeout - Timeout in ms (default 30000)
  * @returns {string} Raw AI response text
  */
-export async function callAI(prompt, { system = '', maxTokens = 1024, timeout = 30000 } = {}, attempt = 0) {
+export async function callAI(prompt, { system = '', maxTokens = 1024, timeout = 7000 } = {}, attempt = 0) {
   const model = MODELS[Math.min(attempt, MODELS.length - 1)]
   const controller = new AbortController()
   const timer = setTimeout(() => controller.abort(), timeout)
