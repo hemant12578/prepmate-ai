@@ -1,72 +1,4 @@
-const API_URL = 'https://openrouter.ai/api/v1/chat/completions'
-
-const MODELS = [
-  'openrouter/auto',
-  'meta-llama/llama-3.1-8b-instruct:free',
-  'google/gemma-2-9b-it:free',
-]
-
-function getHeaders() {
-  const headers = {
-    'Content-Type': 'application/json',
-    'HTTP-Referer': window.location.origin,
-    'X-Title': 'PrepMate AI Interview'
-  }
-  const key = import.meta.env.VITE_OPENROUTER_API_KEY
-  if (key) headers['Authorization'] = `Bearer ${key}`
-  return headers
-}
-
-async function callAI(prompt, attempt = 0) {
-  const model = MODELS[Math.min(attempt, MODELS.length - 1)]
-  const controller = new AbortController()
-  const timeout = setTimeout(() => controller.abort(), 25000)
-
-  try {
-    const res = await fetch(API_URL, {
-      method: 'POST',
-      headers: getHeaders(),
-      signal: controller.signal,
-      body: JSON.stringify({
-        model,
-        messages: [{ role: 'user', content: prompt }],
-        temperature: 0.7,
-        max_tokens: 1024,
-      })
-    })
-
-    clearTimeout(timeout)
-
-    if (!res.ok) {
-      if (attempt < MODELS.length - 1) return callAI(prompt, attempt + 1)
-      throw new Error(`API error ${res.status}`)
-    }
-
-    const data = await res.json()
-    const content = data.choices?.[0]?.message?.content
-    if (!content) {
-      if (attempt < MODELS.length - 1) return callAI(prompt, attempt + 1)
-      throw new Error('Empty response from AI')
-    }
-
-    let cleaned = content.trim()
-    if (cleaned.startsWith('```')) {
-      cleaned = cleaned.replace(/^```(?:json)?\n?/, '').replace(/\n?```$/, '')
-    }
-
-    try {
-      return JSON.parse(cleaned)
-    } catch (e) {
-      const jsonMatch = cleaned.match(/\{[\s\S]*\}/)
-      if (jsonMatch) return JSON.parse(jsonMatch[0])
-      throw new Error('Could not parse AI response as JSON')
-    }
-  } catch (err) {
-    clearTimeout(timeout)
-    if (attempt < MODELS.length - 1) return callAI(prompt, attempt + 1)
-    throw err
-  }
-}
+import { callAIJSON } from './ai'
 
 export async function generateInterviewQuestion(config, questionNum, totalNum) {
   const { category, school, college, job, pressureMode } = config
@@ -93,7 +25,7 @@ Return ONLY JSON:
   "options": null
 }`
 
-  const result = await callAI(prompt)
+  const result = await callAIJSON(prompt, { timeout: 25000 })
   return {
     question: result.question || `Tell me about your experience and background related to ${category === 'job' ? job.role : 'this subject'}.`,
     isHrQuestion: !!result.isHrQuestion || (category === 'job' && job.round === 'HR'),
@@ -125,7 +57,7 @@ Return ONLY JSON:
   "verdictLine": "string (1-sentence interviewer verbal feedback)"
 }`
 
-  const result = await callAI(prompt)
+  const result = await callAIJSON(prompt, { timeout: 25000 })
   return {
     overallScore: Math.min(10, Math.max(1, Number(result.overallScore) || 6)),
     contentAccuracy: Math.min(10, Math.max(1, Number(result.contentAccuracy) || 7)),
@@ -165,7 +97,7 @@ Return ONLY JSON:
 }`
 
   try {
-    const res = await callAI(prompt)
+    const res = await callAIJSON(prompt, { timeout: 25000 })
     return {
       overallScore,
       hiringVerdict,

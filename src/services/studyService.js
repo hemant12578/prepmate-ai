@@ -1,72 +1,4 @@
-const API_URL = 'https://openrouter.ai/api/v1/chat/completions'
-
-const MODELS = [
-  'google/gemma-2-9b-it:free',
-  'meta-llama/llama-3.1-8b-instruct:free',
-  'openrouter/auto',
-]
-
-function getHeaders() {
-  const headers = {
-    'Content-Type': 'application/json',
-    'HTTP-Referer': typeof window !== 'undefined' ? window.location.origin : 'https://prepmate-ai.web.app',
-    'X-Title': 'PrepMate AI Study'
-  }
-  const key = import.meta.env.VITE_OPENROUTER_API_KEY
-  if (key) headers['Authorization'] = `Bearer ${key}`
-  return headers
-}
-
-async function callAI(prompt, attempt = 0) {
-  const model = MODELS[Math.min(attempt, MODELS.length - 1)]
-  const controller = new AbortController()
-  const timeout = setTimeout(() => controller.abort(), 25000) // 25-second timeout per attempt
-
-  try {
-    const res = await fetch(API_URL, {
-      method: 'POST',
-      headers: getHeaders(),
-      signal: controller.signal,
-      body: JSON.stringify({
-        model,
-        messages: [{ role: 'user', content: prompt }],
-        temperature: 0.7,
-        max_tokens: 512, // Compact token output for maximum speed
-      })
-    })
-
-    clearTimeout(timeout)
-
-    if (!res.ok) {
-      if (attempt < MODELS.length - 1) return callAI(prompt, attempt + 1)
-      throw new Error(`API error ${res.status}`)
-    }
-
-    const data = await res.json()
-    const content = data.choices?.[0]?.message?.content
-    if (!content) {
-      if (attempt < MODELS.length - 1) return callAI(prompt, attempt + 1)
-      throw new Error('Empty response from AI')
-    }
-
-    let cleaned = content.trim()
-    if (cleaned.startsWith('```')) {
-      cleaned = cleaned.replace(/^```(?:json)?\n?/, '').replace(/\n?```$/, '')
-    }
-
-    try {
-      return JSON.parse(cleaned)
-    } catch (e) {
-      const jsonMatch = cleaned.match(/\{[\s\S]*\}/)
-      if (jsonMatch) return JSON.parse(jsonMatch[0])
-      throw new Error('Could not parse AI response as JSON')
-    }
-  } catch (err) {
-    clearTimeout(timeout)
-    if (attempt < MODELS.length - 1) return callAI(prompt, attempt + 1)
-    throw err
-  }
-}
+import { callAIJSON } from './ai'
 
 export async function generateStudyQuestion(config, questionNum, totalNum) {
   const { board = 'CBSE', grade = 'Class 10', subject = 'Science', topic = 'General', format = 'mixed', difficulty = 'Medium', pyqMode, isExamMode, uploadedDocText, ncertSyllabusContext } = config || {}
@@ -115,7 +47,7 @@ Return ONLY a JSON object in this exact format:
 }`
 
   try {
-    const result = await callAI(prompt)
+    const result = await callAIJSON(prompt, { maxTokens: 512, timeout: 25000 })
     let processedOptions = null
     if (Array.isArray(result.options)) {
       processedOptions = result.options.map(opt => typeof opt === 'string' ? opt : JSON.stringify(opt))
@@ -167,7 +99,7 @@ Return ONLY a JSON object:
 Score should be 1-10.`
 
   try {
-    const result = await callAI(prompt)
+    const result = await callAIJSON(prompt, { maxTokens: 512, timeout: 25000 })
     return {
       score: Math.min(10, Math.max(1, Number(result.score) || 7)),
       whatYouGotRight: result.whatYouGotRight || 'Good effort on addressing the question!',
@@ -186,7 +118,6 @@ Score should be 1-10.`
 export async function generateStudySummary(config, questionsAndScores) {
   const { topic = 'General Study', subject = 'Science' } = config || {}
 
-  // Fail-safe score extraction — NEVER returns NaN
   const safeScores = Array.isArray(questionsAndScores) && questionsAndScores.length > 0
     ? questionsAndScores
     : [{ score: 7 }]
@@ -209,7 +140,7 @@ Return ONLY JSON:
 }`
 
   try {
-    const res = await callAI(prompt)
+    const res = await callAIJSON(prompt, { maxTokens: 512, timeout: 25000 })
     return {
       totalScore: isNaN(totalScore) ? 75 : totalScore,
       averageScore: isNaN(avg) ? 7.5 : Math.round(avg * 10) / 10,

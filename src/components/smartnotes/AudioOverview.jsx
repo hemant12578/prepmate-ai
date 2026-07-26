@@ -79,7 +79,6 @@ export default function AudioOverview({ docText }) {
 
   return (
     <div className="space-y-6 animate-in max-w-2xl mx-auto">
-      {/* Custom Audio Player Container */}
       <div className="glass rounded-3xl p-7 border border-purple-500/30 shadow-2xl space-y-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -97,7 +96,6 @@ export default function AudioOverview({ docText }) {
               <span>Regenerate Script</span>
             </button>
 
-            {/* Equalizer Waveform Animation */}
             {isPlaying && (
               <div className="flex items-end gap-1 h-5">
                 <div className="w-1 bg-purple-400 rounded-full animate-bounce h-full" />
@@ -108,12 +106,10 @@ export default function AudioOverview({ docText }) {
           </div>
         </div>
 
-        {/* Progress bar */}
         <div className="w-full bg-white/10 h-2 rounded-full overflow-hidden">
           <div className="bg-gradient-to-r from-purple-500 to-emerald-400 h-full transition-all duration-300" style={{ width: `${progress}%` }} />
         </div>
 
-        {/* Player Controls */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             {!isPlaying ? (
@@ -140,7 +136,6 @@ export default function AudioOverview({ docText }) {
             </button>
           </div>
 
-          {/* Voice & Speed Controls */}
           <div className="flex items-center gap-3 text-xs w-full sm:w-auto justify-end">
             <select
               value={selectedVoice}
@@ -166,7 +161,6 @@ export default function AudioOverview({ docText }) {
         </div>
       </div>
 
-      {/* Script Card */}
       <div className="glass rounded-3xl p-6 border border-white/10">
         <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Spoken Audio Script</h4>
         <div className="text-xs text-slate-300 leading-relaxed whitespace-pre-line max-h-60 overflow-y-auto pr-2">

@@ -49,7 +49,6 @@ export default function SourcesSidebar({
 
   const sidebarContent = (
     <div className="flex flex-col h-full bg-[#0f172a] border-r border-[#1e293b] p-4 text-slate-200">
-      {/* Header */}
       <div className="flex items-center justify-between pb-4 border-b border-white/5 mb-4">
         <div className="flex items-center gap-2">
           <BookOpen className="text-purple-400" size={18} />
@@ -62,7 +61,6 @@ export default function SourcesSidebar({
         )}
       </div>
 
-      {/* Add Source Button */}
       <button
         onClick={onOpenAddModal}
         className="w-full btn-primary py-2.5 px-4 rounded-xl text-xs font-semibold text-white flex items-center justify-center gap-2 shadow-lg shadow-purple-500/20 mb-4"
@@ -71,7 +69,6 @@ export default function SourcesSidebar({
         <span>Add Source</span>
       </button>
 
-      {/* Sources List */}
       <div className="flex-1 overflow-y-auto space-y-2 pr-1">
         {sources.length === 0 ? (
           <div className="text-center py-10 px-2 text-slate-500 text-xs">
@@ -98,7 +95,6 @@ export default function SourcesSidebar({
                   className="accent-purple-500 rounded shrink-0 cursor-pointer"
                 />
 
-                {/* YouTube / Image Thumbnail if available */}
                 {src.type === 'youtube' && src.thumbnailUrl ? (
                   <img
                     src={src.thumbnailUrl}
@@ -125,7 +121,6 @@ export default function SourcesSidebar({
                 </div>
               </div>
 
-              {/* Hover Delete Button */}
               <button
                 onClick={(e) => {
                   e.stopPropagation()
@@ -141,7 +136,6 @@ export default function SourcesSidebar({
         )}
       </div>
 
-      {/* Footer Controls */}
       {sources.length > 0 && (
         <div className="pt-3 border-t border-white/5 flex items-center justify-between text-xs text-slate-400 mt-2">
           <span>{selectedCount} of {sources.length} selected</span>
@@ -158,12 +152,10 @@ export default function SourcesSidebar({
 
   return (
     <>
-      {/* Desktop Sidebar (280px wide) */}
       <aside className="hidden md:block min-w-[280px] w-[280px] h-[calc(100vh-80px)] sticky top-16 rounded-3xl overflow-hidden glass border border-white/10 shadow-2xl">
         {sidebarContent}
       </aside>
 
-      {/* Mobile Drawer */}
       {mobileOpen && (
         <div className="fixed inset-0 z-50 md:hidden bg-black/80 backdrop-blur-sm animate-in">
           <div className="w-80 max-w-[85vw] h-full bg-[#0f172a] shadow-2xl">

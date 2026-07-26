@@ -15,19 +15,15 @@ function YoutubeIcon({ size = 15, className = '' }) {
 export default function AddSourceModal({ isOpen, onClose, onAddSource }) {
   const [activeTab, setActiveTab] = useState('pdf') // 'pdf', 'image', 'text', 'youtube'
 
-  // PDF Tab State
   const { extractTextFromPDF, extracting: pdfExtracting, error: pdfError } = usePDFExtract()
   const pdfInputRef = useRef(null)
 
-  // Image OCR Tab State
   const { extractTextFromImage, extracting: imgExtracting, progress: imgProgress, error: imgError } = useImageExtract()
   const imgInputRef = useRef(null)
 
-  // Text Tab State
   const [textTitle, setTextTitle] = useState('')
   const [textBody, setTextBody] = useState('')
 
-  // YouTube Tab State
   const [ytUrl, setYtUrl] = useState('')
   const [ytLoading, setYtLoading] = useState(false)
   const [aiGenerating, setAiGenerating] = useState(false)
@@ -37,7 +33,6 @@ export default function AddSourceModal({ isOpen, onClose, onAddSource }) {
 
   if (!isOpen) return null
 
-  // Handle PDF Upload
   const handlePdfUpload = async (e) => {
     const file = e.target.files?.[0]
     if (!file) return
@@ -58,7 +53,6 @@ export default function AddSourceModal({ isOpen, onClose, onAddSource }) {
     }
   }
 
-  // Handle Image Upload & OCR Extraction
   const handleImageUpload = async (e) => {
     const file = e.target.files?.[0]
     if (!file) return
@@ -80,7 +74,6 @@ export default function AddSourceModal({ isOpen, onClose, onAddSource }) {
     }
   }
 
-  // Handle Text Submission
   const handleTextSubmit = () => {
     if (!textBody.trim()) return
     onAddSource({
@@ -97,7 +90,6 @@ export default function AddSourceModal({ isOpen, onClose, onAddSource }) {
     onClose()
   }
 
-  // Handle YouTube Fetch (Instant 1-step processing)
   const handleYtFetch = async () => {
     if (!ytUrl.trim()) return
     const vId = extractVideoId(ytUrl)
@@ -134,7 +126,6 @@ export default function AddSourceModal({ isOpen, onClose, onAddSource }) {
     }
   }
 
-  // Handle AI Transcript Generation Fallback
   const handleAiSynthesize = async () => {
     const vId = extractVideoId(ytUrl) || 'video'
     setAiGenerating(true)
@@ -161,7 +152,6 @@ export default function AddSourceModal({ isOpen, onClose, onAddSource }) {
     }
   }
 
-  // Handle Manual YouTube Transcript Submission
   const handleManualYtSubmit = () => {
     if (!manualTranscript.trim()) return
     const vId = extractVideoId(ytUrl) || 'video'
@@ -185,7 +175,6 @@ export default function AddSourceModal({ isOpen, onClose, onAddSource }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in">
       <div className="glass rounded-3xl p-6 sm:p-8 max-w-xl w-full border border-purple-500/30 shadow-2xl relative max-h-[90vh] overflow-y-auto">
-        {/* Close Button */}
         <button
           onClick={onClose}
           className="absolute top-5 right-5 p-2 rounded-xl text-slate-400 hover:text-white hover:bg-white/5 transition-colors"
@@ -193,13 +182,11 @@ export default function AddSourceModal({ isOpen, onClose, onAddSource }) {
           <X size={18} />
         </button>
 
-        {/* Modal Title */}
         <div className="text-center mb-6">
           <h2 className="text-xl font-bold text-white mb-1">Add Source Document</h2>
           <p className="text-xs text-slate-400">Add PDFs, Images (OCR), Notes, or YouTube lectures for AI analysis.</p>
         </div>
 
-        {/* 4 Tabs Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 bg-white/[0.03] p-1.5 rounded-2xl border border-white/[0.06] mb-6">
           <button
             onClick={() => setActiveTab('pdf')}
@@ -239,7 +226,6 @@ export default function AddSourceModal({ isOpen, onClose, onAddSource }) {
           </button>
         </div>
 
-        {/* Tab 1: PDF Upload */}
         {activeTab === 'pdf' && (
           <div
             onClick={() => pdfInputRef.current?.click()}
@@ -272,7 +258,6 @@ export default function AddSourceModal({ isOpen, onClose, onAddSource }) {
           </div>
         )}
 
-        {/* Tab 2: Image Upload & OCR */}
         {activeTab === 'image' && (
           <div
             onClick={() => imgInputRef.current?.click()}
@@ -308,7 +293,6 @@ export default function AddSourceModal({ isOpen, onClose, onAddSource }) {
           </div>
         )}
 
-        {/* Tab 3: Paste Text */}
         {activeTab === 'text' && (
           <div className="space-y-4">
             <div>
@@ -349,7 +333,6 @@ export default function AddSourceModal({ isOpen, onClose, onAddSource }) {
           </div>
         )}
 
-        {/* Tab 4: YouTube Video */}
         {activeTab === 'youtube' && (
           <div className="space-y-4">
             <div>
@@ -393,7 +376,6 @@ export default function AddSourceModal({ isOpen, onClose, onAddSource }) {
                 )}
               </button>
             ) : (
-              /* Manual Transcript Fallback & AI Synthesis */
               <div className="space-y-3 pt-2 border-t border-white/5 animate-in">
                 <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-300 text-xs flex items-start justify-between gap-2">
                   <div className="flex items-start gap-2">

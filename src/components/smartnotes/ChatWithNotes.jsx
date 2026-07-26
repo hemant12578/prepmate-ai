@@ -49,7 +49,6 @@ export default function ChatWithNotes({ docText }) {
 
   return (
     <div className="glass rounded-3xl p-6 sm:p-7 border border-white/10 shadow-2xl flex flex-col h-[550px] animate-in">
-      {/* Header */}
       <div className="flex items-center justify-between pb-4 border-b border-white/5 mb-4">
         <div className="flex items-center gap-2">
           <Bot className="text-purple-400" size={20} />
@@ -70,7 +69,6 @@ export default function ChatWithNotes({ docText }) {
         </div>
       </div>
 
-      {/* Messages Scroll Area */}
       <div className="flex-1 overflow-y-auto space-y-4 pr-2">
         {messages.map((m, idx) => (
           <div key={idx} className={`flex items-start gap-3 ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
@@ -100,7 +98,6 @@ export default function ChatWithNotes({ docText }) {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Starter Chips */}
       {messages.length <= 2 && (
         <div className="flex flex-wrap gap-2 my-3">
           {starterChips.map((chip, idx) => (
@@ -115,7 +112,6 @@ export default function ChatWithNotes({ docText }) {
         </div>
       )}
 
-      {/* Input Area */}
       <div className="pt-3 border-t border-white/5 flex gap-2">
         <input
           type="text"

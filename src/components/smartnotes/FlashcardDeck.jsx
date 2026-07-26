@@ -88,7 +88,6 @@ export default function FlashcardDeck({ docText }) {
 
   return (
     <div className="animate-in max-w-xl mx-auto space-y-6">
-      {/* Top Progress & Regenerate Bar */}
       <div className="glass rounded-2xl p-4 flex items-center justify-between text-xs border border-white/5 gap-3">
         <span className="text-slate-400 shrink-0">Progress: <strong className="text-white">{gotItCount}/{totalCards} Mastered</strong></span>
         
@@ -107,13 +106,11 @@ export default function FlashcardDeck({ docText }) {
         </div>
       </div>
 
-      {/* 3D Flip Card Container */}
       <div
         onClick={() => setIsFlipped(!isFlipped)}
         className="w-full h-80 cursor-pointer perspective-1000 group"
       >
         <div className={`relative w-full h-full duration-500 transform-style-3d transition-transform ${isFlipped ? 'rotate-y-180' : ''}`}>
-          {/* Front of Card */}
           <div className="absolute inset-0 w-full h-full glass rounded-3xl p-8 border border-purple-500/30 backface-hidden flex flex-col justify-between text-center bg-[#1e293b] shadow-2xl">
             <div className="flex items-center justify-between text-[11px] text-purple-400 uppercase tracking-wider font-semibold">
               <span>{currentCard?.category || 'Question'}</span>
@@ -127,7 +124,6 @@ export default function FlashcardDeck({ docText }) {
             </p>
           </div>
 
-          {/* Back of Card */}
           <div className="absolute inset-0 w-full h-full glass rounded-3xl p-8 border border-purple-500/50 backface-hidden rotate-y-180 flex flex-col justify-between text-center bg-[#2d1b69] shadow-2xl">
             <div className="flex items-center justify-between text-[11px] text-purple-300 uppercase tracking-wider font-semibold">
               <span>Answer / Concept</span>
@@ -143,7 +139,6 @@ export default function FlashcardDeck({ docText }) {
         </div>
       </div>
 
-      {/* Card Actions */}
       <div className="flex items-center justify-between gap-4">
         <button
           onClick={() => {

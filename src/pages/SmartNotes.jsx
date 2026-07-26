@@ -9,7 +9,6 @@ import AudioOverview from '../components/smartnotes/AudioOverview'
 import { generateDocSummary } from '../services/smartnotes'
 import { ChevronLeft, Sparkles, BookOpen, RotateCw, MessageSquare, Volume2, Plus, Layers, CheckSquare, Menu } from 'lucide-react'
 
-// helper to get combined text of all selected sources
 const getCombinedText = (sources) => {
   const selected = sources.filter(s => s.selected)
   if (selected.length === 0) return ''
@@ -44,7 +43,6 @@ export default function SmartNotes() {
     }
   }, [sources])
 
-  // Source Handlers
   const handleAddSource = (newSource) => {
     setSources(prev => [newSource, ...prev])
   }
@@ -82,7 +80,6 @@ export default function SmartNotes() {
     }
   }
 
-  // Auto-generate summary when sources are first selected
   useEffect(() => {
     if (combinedText && !summary && !summaryLoading) {
       handleGenerateSummary()
@@ -98,7 +95,6 @@ export default function SmartNotes() {
 
   return (
     <div className="animate-in max-w-7xl mx-auto py-4">
-      {/* Top Header Navigation Bar */}
       <div className="flex items-center justify-between mb-6 px-2">
         <button
           onClick={() => setScreen('home')}
@@ -108,7 +104,6 @@ export default function SmartNotes() {
           <span>Back to Home</span>
         </button>
 
-        {/* Mobile Sources Drawer Toggle */}
         <button
           onClick={() => setMobileDrawerOpen(true)}
           className="md:hidden px-3.5 py-1.5 rounded-xl glass-light border border-white/10 text-xs font-semibold text-purple-300 flex items-center gap-2"
@@ -118,9 +113,7 @@ export default function SmartNotes() {
         </button>
       </div>
 
-      {/* Main Page Layout: Left Sidebar + Right Main Area */}
       <div className="flex gap-6 items-start">
-        {/* Left Sidebar (280px) */}
         <SourcesSidebar
           sources={sources}
           onToggleSelect={handleToggleSelect}
@@ -131,9 +124,7 @@ export default function SmartNotes() {
           onCloseMobile={() => setMobileDrawerOpen(false)}
         />
 
-        {/* Right Main Content Area */}
         <div className="flex-1 min-w-0 space-y-6">
-          {/* Title Banner */}
           <div className="glass rounded-3xl border border-white/10 shadow-2xl overflow-hidden">
             <div className="h-32 relative overflow-hidden">
               <img src="/assets/smart_notes.jpg" alt="Smart Notes" className="w-full h-full object-cover" />
@@ -177,7 +168,6 @@ export default function SmartNotes() {
             </div>
           </div>
 
-          {/* Feature Tabs Header */}
           <div className="flex items-center gap-2 flex-wrap bg-white/[0.02] p-1.5 rounded-2xl border border-white/[0.06]">
             {tabs.map((t) => {
               const Icon = t.icon
@@ -202,9 +192,7 @@ export default function SmartNotes() {
             })}
           </div>
 
-          {/* EMPTY STATES */}
           {sources.length === 0 ? (
-            /* Empty State 1: No sources added */
             <div className="glass rounded-3xl p-12 text-center border border-white/10 animate-in">
               <div className="w-16 h-16 rounded-3xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 mx-auto mb-4">
                 <Layers size={32} />
@@ -222,7 +210,6 @@ export default function SmartNotes() {
               </button>
             </div>
           ) : !combinedText ? (
-            /* Empty State 2: Sources added but 0 selected */
             <div className="glass rounded-3xl p-12 text-center border border-white/10 animate-in">
               <div className="w-16 h-16 rounded-3xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 mx-auto mb-4">
                 <CheckSquare size={32} />
@@ -239,7 +226,7 @@ export default function SmartNotes() {
               </button>
             </div>
           ) : (
-            /* PERSISTENT TAB VIEWS: Mounted simultaneously with CSS visibility toggle to preserve state */
+            /* Mounted simultaneously with CSS visibility toggle to preserve state */
             <div className="min-h-[400px]">
               <div className={activeTab === 'summary' ? 'block' : 'hidden'}>
                 <SummaryView summary={summary} loading={summaryLoading} onGenerate={handleGenerateSummary} error={error} />
@@ -261,7 +248,6 @@ export default function SmartNotes() {
         </div>
       </div>
 
-      {/* Add Source Modal */}
       <AddSourceModal
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}

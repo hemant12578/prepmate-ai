@@ -1,87 +1,4 @@
-
-const API_URL = 'https://openrouter.ai/api/v1/chat/completions'
-
-const MODELS = [
-  'openrouter/auto',
-  'meta-llama/llama-3.1-8b-instruct:free',
-  'google/gemma-2-9b-it:free',
-  'mistralai/mistral-7b-instruct:free',
-]
-
-function getHeaders() {
-  const apiKey = import.meta.env.VITE_OPENROUTER_API_KEY
-  const headers = {
-    'Content-Type': 'application/json',
-    'HTTP-Referer': typeof window !== 'undefined' ? window.location.origin : 'https://prepmate-ai.web.app',
-    'X-Title': 'PrepMate AI'
-  }
-  if (apiKey) {
-    headers['Authorization'] = `Bearer ${apiKey}`
-  }
-  return headers
-}
-
-async function callAI(prompt, attempt = 0) {
-  const model = MODELS[Math.min(attempt, MODELS.length - 1)]
-
-  const controller = new AbortController()
-  const timeout = setTimeout(() => controller.abort(), 30000)
-
-  try {
-    const res = await fetch(API_URL, {
-      method: 'POST',
-      headers: getHeaders(),
-      signal: controller.signal,
-      body: JSON.stringify({
-        model,
-        messages: [{ role: 'user', content: prompt }],
-        temperature: 0.7,
-        max_tokens: 1024,
-      })
-    })
-
-    clearTimeout(timeout)
-
-    if (!res.ok) {
-      const errText = await res.text()
-      if (attempt < MODELS.length - 1) {
-        console.warn(`Model ${model} failed (${res.status}), trying next fallback model...`)
-        return callAI(prompt, attempt + 1)
-      }
-      throw new Error(`API error ${res.status}: ${errText}`)
-    }
-
-    const data = await res.json()
-    const content = data.choices?.[0]?.message?.content
-
-    if (!content) {
-      if (attempt < MODELS.length - 1) return callAI(prompt, attempt + 1)
-      throw new Error('Empty response from AI model')
-    }
-
-    let cleaned = content.trim()
-    if (cleaned.startsWith('```')) {
-      cleaned = cleaned.replace(/^```(?:json)?\n?/, '').replace(/\n?```$/, '')
-    }
-
-    try {
-      return JSON.parse(cleaned)
-    } catch (e) {
-      const jsonMatch = cleaned.match(/\{[\s\S]*\}/)
-      if (jsonMatch) return JSON.parse(jsonMatch[0])
-      console.warn('Unparseable AI response:', content)
-      throw new Error('Could not parse AI response as JSON')
-    }
-  } catch (err) {
-    clearTimeout(timeout)
-    if (err.name === 'AbortError') {
-      if (attempt < MODELS.length - 1) return callAI(prompt, attempt + 1)
-      throw new Error('AI Request timed out')
-    }
-    throw err
-  }
-}
-
+import { callAIJSON } from './ai'
 export async function generateQuestion(topic, mode, difficulty, questionNum, interviewType = 'Mixed', prevScores = [], format = 'mixed', optionsObj = {}) {
   const { uploadedDocText = '', ncertSyllabusContext = '', isExamMode = false } = typeof optionsObj === 'object' ? optionsObj : {}
 
@@ -148,7 +65,7 @@ Return ONLY a JSON object in this exact format, no other text:
   }
 
   try {
-    const result = await callAI(prompt)
+    const result = await callAIJSON(prompt)
     return {
       question: result.question || 'Could not generate question',
       format: result.format || effectiveFormat,
@@ -176,7 +93,7 @@ Return ONLY a JSON object in this exact format, no other text:
 
 Score should be 1-10. Be encouraging but honest. If the answer is empty or nonsensical, give a low score.`
 
-  const result = await callAI(prompt)
+  const result = await callAIJSON(prompt)
   return {
     score: Math.min(10, Math.max(1, Number(result.score) || 5)),
     whatYouGotRight: result.whatYouGotRight || 'Good attempt!',
@@ -198,7 +115,7 @@ Return ONLY a JSON object in this exact format, no other text:
 
 Performance badges: "Excellent" if avg >= 8, "Good" if avg >= 5, "Keep Practicing" if avg < 5.`
 
-  const result = await callAI(prompt)
+  const result = await callAIJSON(prompt)
   const avg = result.averageScore || (questionsAndScores.reduce((sum, q) => sum + q.score, 0) / questionsAndScores.length)
   const passed = questionsAndScores.filter(q => q.score >= 5).length
 

@@ -1,22 +1,18 @@
 const API_URL = 'https://openrouter.ai/api/v1/chat/completions'
 
-// Comprehensive YouTube Video ID extractor supporting /watch, /live, /shorts, /embed, youtu.be, and ?si= query parameters
 export const extractVideoId = (url) => {
   if (!url) return null
   const cleanUrl = url.trim()
 
-  // Primary regex covering watch?v=, live/, shorts/, embed/, youtu.be/
   const match = cleanUrl.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|live\/|shorts\/))([\w-]{11})/)
   if (match && match[1]) return match[1]
 
-  // Fallback regex
   const matchAlt = cleanUrl.match(/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|live\/|shorts\/|watch\?v=|\&v=)([^#\&\?]*).*/)
   if (matchAlt && matchAlt[2] && matchAlt[2].length === 11) return matchAlt[2]
 
   return null
 }
 
-// Quick title fetch via YouTube oEmbed API
 export const fetchYouTubeTitle = async (url) => {
   const vId = extractVideoId(url)
   try {
@@ -30,7 +26,6 @@ export const fetchYouTubeTitle = async (url) => {
       if (data.title) return data.title
     }
   } catch (e) {
-    // fallback
   }
   return vId ? `YouTube Video Lecture (${vId})` : 'YouTube Educational Video'
 }
@@ -41,7 +36,6 @@ export const fetchYouTubeTranscript = async (url) => {
 
   const title = await fetchYouTubeTitle(url)
 
-  // Fast fetch attempt on primary proxy with 2s timeout
   try {
     const controller = new AbortController()
     const timeout = setTimeout(() => controller.abort(), 2000)
@@ -55,20 +49,17 @@ export const fetchYouTubeTranscript = async (url) => {
       }
     }
   } catch (err) {
-    // fallback to AI transcript synthesizer
   }
 
-  // Fast AI Transcript Synthesizer Fallback (100% reliable)
   try {
     const aiText = await generateAITranscriptFromVideo(videoId, url, title)
     if (aiText && aiText.length > 50) {
       return { text: aiText, videoId, title }
     }
   } catch (err) {
-    console.warn('AI transcript generation failed:', err)
+    console.error('AI transcript failed:', err.message)
   }
 
-  // All transcript methods failed
   throw new Error(`Could not fetch transcript for "${title}". Try pasting the transcript manually.`)
 }
 

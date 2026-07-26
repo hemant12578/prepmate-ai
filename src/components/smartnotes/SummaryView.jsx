@@ -56,7 +56,6 @@ export default function SummaryView({ summary, loading, onGenerate, error }) {
 
   return (
     <div className="space-y-6 animate-in">
-      {/* Header Card */}
       <div className="glass rounded-3xl p-7 border border-white/10 shadow-2xl relative overflow-hidden">
         <div className="flex items-center justify-between mb-3">
           <span className="text-xs font-semibold text-purple-400 uppercase tracking-wider flex items-center gap-1.5">
@@ -83,7 +82,6 @@ export default function SummaryView({ summary, loading, onGenerate, error }) {
         <p className="text-sm text-slate-300 italic leading-relaxed">{summary.oneLiner}</p>
       </div>
 
-      {/* Key Takeaways */}
       {Array.isArray(summary.keyPoints) && summary.keyPoints.length > 0 && (
         <div className="glass rounded-3xl p-7 border border-white/10">
           <h3 className="text-base font-bold text-white mb-4 flex items-center gap-2">
@@ -114,7 +112,6 @@ export default function SummaryView({ summary, loading, onGenerate, error }) {
         </div>
       )}
 
-      {/* Concept Definition Pills */}
       {Array.isArray(summary.mainConcepts) && summary.mainConcepts.length > 0 && (
         <div className="glass rounded-3xl p-7 border border-white/10">
           <h3 className="text-base font-bold text-white mb-4 flex items-center gap-2">
@@ -137,7 +134,6 @@ export default function SummaryView({ summary, loading, onGenerate, error }) {
         </div>
       )}
 
-      {/* Structured Study Guide */}
       {summary.studyGuide && (
         <div className="glass rounded-3xl p-7 border border-white/10">
           <h3 className="text-base font-bold text-white mb-4 flex items-center gap-2">
