@@ -85,11 +85,22 @@ export default function StudySession() {
     }
   }
 
-  if (loading) {
+  if (!studyConfig) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4 animate-in">
         <div className="dot-pulse"><span /><span /><span /></div>
-        <p className="text-xs text-purple-300 font-medium">Generating Study Question {currentQ + 1} of {totalQ}...</p>
+        <p className="text-xs text-purple-300 font-medium">Redirecting to Study Setup...</p>
+      </div>
+    )
+  }
+
+  if (loading || submitting) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4 animate-in">
+        <div className="dot-pulse"><span /><span /><span /></div>
+        <p className="text-xs text-purple-300 font-medium">
+          {submitting ? 'Evaluating & Scoring Your Answer...' : `Generating Study Question ${currentQ + 1} of ${totalQ}...`}
+        </p>
       </div>
     )
   }
@@ -111,6 +122,7 @@ export default function StudySession() {
       currentQ={currentQ}
       totalQ={totalQ}
       onSubmit={handleSubmitAnswer}
+      submitting={submitting}
     />
   )
 }

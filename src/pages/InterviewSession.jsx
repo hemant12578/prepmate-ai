@@ -85,11 +85,22 @@ export default function InterviewSession() {
     }
   }
 
-  if (loading) {
+  if (!interviewConfig) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4 animate-in">
         <div className="dot-pulse"><span /><span /><span /></div>
-        <p className="text-xs text-red-300 font-medium">Interviewer Preparing Question {currentQ + 1} of {totalQ}...</p>
+        <p className="text-xs text-red-300 font-medium">Redirecting to Interview Setup...</p>
+      </div>
+    )
+  }
+
+  if (loading || submitting) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4 animate-in">
+        <div className="dot-pulse"><span /><span /><span /></div>
+        <p className="text-xs text-red-300 font-medium">
+          {submitting ? 'Interviewer Analyzing & Scoring Your Response...' : `Interviewer Preparing Question ${currentQ + 1} of ${totalQ}...`}
+        </p>
       </div>
     )
   }
