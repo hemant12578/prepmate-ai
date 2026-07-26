@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useApp } from '../context/AppContext'
 import SourcesSidebar from '../components/smartnotes/SourcesSidebar'
 import AddSourceModal from '../components/smartnotes/AddSourceModal'
