@@ -4,11 +4,11 @@
 const API_URL = 'https://openrouter.ai/api/v1/chat/completions'
 
 const MODELS = [
+  'openrouter/free',
+  'inclusionai/ling-3.0-flash:free',
+  'poolside/laguna-s-2.1:free',
+  'cohere/north-mini-code:free',
   'openrouter/auto',
-  'meta-llama/llama-3.1-8b-instruct',
-  'qwen/qwen-2.5-7b-instruct',
-  'deepseek/deepseek-r1',
-  'meta-llama/llama-3.3-70b-instruct',
 ]
 
 function headers() {

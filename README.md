@@ -426,14 +426,16 @@ vercel --prod --yes
 
 ## 🤖 AI Models & Engine
 
-PrepMate AI uses **OpenRouter** as a multi-model AI gateway with an automatic fallback chain:
+PrepMate AI uses a centralized shared client (`src/services/ai.js`) powered by **OpenRouter** with a strictly **100% Free ($0/M tokens)** multi-model fallback chain + zero-dependency backup endpoint:
 
 ```
 Request Flow:
-  1. openrouter/auto          ← Tries best available model
-  2. meta-llama/llama-3.1-8b  ← Fast, reliable fallback
-  3. google/gemma-2-9b-it     ← Google's open model
-  4. qwen/qwen-2.5-7b         ← Final fallback
+  1. openrouter/free                  ← Strictly $0 free auto-router
+  2. inclusionai/ling-3.0-flash:free  ← 100% Free ($0/M tokens) 124B MoE model
+  3. poolside/laguna-s-2.1:free       ← 100% Free ($0/M tokens) 118B model
+  4. cohere/north-mini-code:free      ← 100% Free ($0/M tokens) 30B model
+  5. openrouter/auto                  ← Auto fallback model
+  6. Pollinations AI                  ← Zero-dependency, 100% free backup endpoint
 ```
 
 ### Timeout & Retry Strategy

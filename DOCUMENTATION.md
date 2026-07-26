@@ -164,16 +164,16 @@ The `AppProvider` wraps the entire application and provides:
 
 ### Model Fallback Chain
 
-Each service uses a 4-model waterfall strategy:
+All services use a centralized AI client (`src/services/ai.js`) with a 5-tier strictly **100% Free ($0/M tokens)** OpenRouter fallback chain plus an automated Pollinations AI backup endpoint:
 
 ```
-Attempt 0: openrouter/auto
-Attempt 1: meta-llama/llama-3.1-8b-instruct:free
-Attempt 2: google/gemma-2-9b-it:free
-Attempt 3: qwen/qwen-2.5-7b-instruct:free (or mistral-7b)
+Attempt 0: openrouter/free                  (Strictly $0 free auto-router)
+Attempt 1: inclusionai/ling-3.0-flash:free  (100% Free 124B MoE model)
+Attempt 2: poolside/laguna-s-2.1:free       (100% Free 118B model)
+Attempt 3: cohere/north-mini-code:free      (100% Free 30B model)
+Attempt 4: openrouter/auto                  (Auto fallback model)
+Attempt 5: Pollinations AI                  (Zero-dependency, 100% free backup endpoint)
 ```
-
-If all 4 models fail, services return **static fallback content** so the UI never crashes.
 
 ### Request Configuration
 
