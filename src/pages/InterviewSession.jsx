@@ -3,6 +3,7 @@ import { useApp } from '../context/AppContext'
 import { generateInterviewQuestion, evaluateInterviewAnswer } from '../services/interviewService'
 import InterviewQuestion from '../components/interview/InterviewQuestion'
 import InterviewFeedback from '../components/interview/InterviewFeedback'
+import { AlertCircle, RotateCw } from 'lucide-react'
 
 export default function InterviewSession() {
   const { interviewConfig, setScreen, addSessionToHistory } = useApp()
@@ -89,6 +90,25 @@ export default function InterviewSession() {
       <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4 animate-in">
         <div className="dot-pulse"><span /><span /><span /></div>
         <p className="text-xs text-red-300 font-medium">Interviewer Preparing Question {currentQ + 1} of {totalQ}...</p>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="glass rounded-3xl p-10 text-center animate-in border border-red-500/20 max-w-xl mx-auto my-12">
+        <div className="w-14 h-14 rounded-2xl bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-400 mx-auto mb-4">
+          <AlertCircle size={28} />
+        </div>
+        <h3 className="text-lg font-bold text-white mb-2">Question Generation Failed</h3>
+        <p className="text-xs text-red-300 mb-6 max-w-sm mx-auto">{error}</p>
+        <button
+          onClick={fetchQuestion}
+          className="btn-primary px-6 py-3 rounded-2xl text-xs font-semibold text-white inline-flex items-center gap-2 shadow-lg shadow-purple-500/20"
+        >
+          <RotateCw size={14} />
+          <span>Retry Question</span>
+        </button>
       </div>
     )
   }

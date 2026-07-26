@@ -1,15 +1,15 @@
 import { callAIJSON } from './ai'
 
 export async function generateInterviewQuestion(config, questionNum, totalNum) {
-  const { category, school, college, job, pressureMode } = config
+  const { category = 'job', school = {}, college = {}, job = {}, pressureMode = 'Normal' } = config || {}
 
   let contextStr = ''
   if (category === 'school') {
-    contextStr = `School Viva for ${school.board} ${school.grade}, Subject: ${school.subject}, Topic: ${school.topic}, Style: ${school.vivaStyle}`
+    contextStr = `School Viva for ${school?.board || 'CBSE'} ${school?.grade || 'Class 10'}, Subject: ${school?.subject || 'Science'}, Topic: ${school?.topic || 'General'}, Style: ${school?.vivaStyle || 'Oral Viva'}`
   } else if (category === 'college') {
-    contextStr = `College Entrance Interview for ${college.targetType}, Round: ${college.round}, Focus: ${college.focusArea}`
+    contextStr = `College Entrance Interview for ${college?.targetType || 'University'}, Round: ${college?.round || 'Personal Interview'}, Focus: ${college?.focusArea || 'Academic'}`
   } else {
-    contextStr = `Job Interview for ${job.role} (${job.expLevel}), Round: ${job.round}, Company: ${job.companyType}`
+    contextStr = `Job Interview for ${job?.role || 'Software Engineer'} (${job?.expLevel || 'Entry Level'}), Round: ${job?.round || 'Technical'}, Company: ${job?.companyType || 'Product'}`
   }
 
   const prompt = `You are a professional interviewer simulating a real interview.
@@ -25,11 +25,16 @@ Return ONLY JSON:
   "options": null
 }`
 
-  const result = await callAIJSON(prompt, { timeout: 25000 })
-  return {
-    question: result.question || `Tell me about your experience and background related to ${category === 'job' ? job.role : 'this subject'}.`,
-    isHrQuestion: !!result.isHrQuestion || (category === 'job' && job.round === 'HR'),
-    options: null
+  try {
+    const result = await callAIJSON(prompt, { timeout: 25000 })
+    return {
+      question: result?.question || `Tell me about your experience and background related to ${category === 'job' ? (job?.role || 'this role') : 'this subject'}.`,
+      isHrQuestion: !!result?.isHrQuestion || (category === 'job' && job?.round === 'HR'),
+      options: null
+    }
+  } catch (e) {
+    console.error('Interview question generation failed:', e.message)
+    throw new Error('Could not generate interview question. Please check your internet connection and try again.')
   }
 }
 
