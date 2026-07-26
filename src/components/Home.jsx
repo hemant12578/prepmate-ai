@@ -232,7 +232,7 @@ export default function Home() {
 
           {/* REAL COMPUTED STAT COUNTERS */}
           <div className="grid grid-cols-3 gap-2 sm:gap-3 w-full md:w-auto">
-            <div className="p-3 sm:p-4 rounded-2xl bg-white/[0.03] border border-white/[0.08] text-center backdrop-blur-md">
+            <div className="p-3 sm:p-4 rounded-2xl bg-white/[0.05] border border-white/[0.08] text-center">
               <div className="flex items-center justify-center gap-1 text-amber-400 mb-1">
                 <Flame size={14} />
                 <span className="text-[10px] sm:text-xs font-bold uppercase">Streak</span>
@@ -240,7 +240,7 @@ export default function Home() {
               <p className="text-base sm:text-lg font-extrabold text-white">{realStreak} {realStreak === 1 ? 'Day' : 'Days'}</p>
             </div>
 
-            <div className="p-3 sm:p-4 rounded-2xl bg-white/[0.03] border border-white/[0.08] text-center backdrop-blur-md">
+            <div className="p-3 sm:p-4 rounded-2xl bg-white/[0.05] border border-white/[0.08] text-center">
               <div className="flex items-center justify-center gap-1 text-emerald-400 mb-1">
                 <Award size={14} />
                 <span className="text-[10px] sm:text-xs font-bold uppercase">Avg Score</span>
@@ -250,7 +250,7 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="p-3 sm:p-4 rounded-2xl bg-white/[0.03] border border-white/[0.08] text-center backdrop-blur-md">
+            <div className="p-3 sm:p-4 rounded-2xl bg-white/[0.05] border border-white/[0.08] text-center">
               <div className="flex items-center justify-center gap-1 text-purple-400 mb-1">
                 <CheckCircle2 size={14} />
                 <span className="text-[10px] sm:text-xs font-bold uppercase">Sessions</span>

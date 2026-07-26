@@ -275,7 +275,7 @@ export default function LandingPage() {
           {/* Animated badge */}
           <motion.div
             variants={fadeUp}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-purple-500/30 bg-purple-500/10 text-purple-300 text-sm mb-8 backdrop-blur-sm"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-purple-500/30 bg-purple-500/10 text-purple-300 text-xs sm:text-sm mb-8"
           >
             <span className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-pulse" />
             Next-Gen AI Learning & Interview Platform
@@ -284,7 +284,7 @@ export default function LandingPage() {
           {/* Main heading */}
           <motion.h1
             variants={fadeUp}
-            className="text-5xl sm:text-6xl md:text-7xl font-black text-white leading-tight mb-6"
+            className="text-3xl sm:text-5xl md:text-7xl font-black text-white leading-tight mb-6"
           >
             Master Any Topic.
             <br />
@@ -296,7 +296,7 @@ export default function LandingPage() {
           {/* Subtext */}
           <motion.p
             variants={fadeUp}
-            className="text-lg sm:text-xl text-gray-400 mb-10 max-w-2xl mx-auto leading-relaxed"
+            className="text-sm sm:text-lg md:text-xl text-gray-400 mb-8 sm:mb-10 max-w-2xl mx-auto leading-relaxed px-2"
           >
             Adaptive study practice, 90s pressure interview simulations,
             NotebookLM multi-source analysis, and voice recognition —
@@ -364,7 +364,7 @@ export default function LandingPage() {
                 viewport={{ once: true }}
               >
                 <TiltCard
-                  className="p-6 rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-sm h-full hover:border-purple-500/30 transition-colors duration-300"
+                  className="p-6 rounded-2xl border border-white/10 bg-white/[0.03] h-full hover:border-purple-500/30 transition-colors duration-300"
                   options={{ max: 15, speed: 400, glare: true, 'max-glare': 0.3, scale: 1.05 }}
                 >
                   <div
@@ -609,7 +609,7 @@ export default function LandingPage() {
       </section>
 
       {/* ——— FOOTER ——— */}
-      <footer className="border-t border-white/10 py-10 px-6 text-center text-xs text-slate-400 bg-black/40 backdrop-blur-md">
+      <footer className="border-t border-white/10 py-10 px-6 text-center text-xs text-slate-400 bg-black/60">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2 cursor-pointer" onClick={() => setScreen('home')}>
             <img src="/logo.png" alt="PrepMate AI Logo" className="w-6 h-6 rounded-md shadow-md shadow-purple-500/20" />

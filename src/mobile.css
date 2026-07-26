@@ -1,0 +1,209 @@
+/* ============================================
+   PrepMate AI — Mobile Optimization Overrides
+   Fixes blur rendering, touch interactions,
+   and layout for mobile without removing animations
+   ============================================ */
+
+/* ——— MOBILE PERFORMANCE: Reduce GPU-heavy blur ——— */
+@media (max-width: 767px) {
+
+  /* Reduce backdrop-blur intensity on mobile GPUs */
+  .glass {
+    background: rgba(15, 23, 42, 0.75);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  .glass-light {
+    background: rgba(30, 41, 59, 0.65);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  .nav-floating {
+    background: rgba(3, 7, 18, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  /* Reduce background blob sizes & blur for mobile GPU */
+  .mesh-bg .blob {
+    filter: blur(60px);
+    opacity: 0.08;
+  }
+  .mesh-bg .blob-1 {
+    width: 300px;
+    height: 300px;
+    top: -100px;
+    left: -50px;
+  }
+  .mesh-bg .blob-2 {
+    width: 250px;
+    height: 250px;
+    bottom: -80px;
+    right: -50px;
+  }
+  .mesh-bg .blob-3 {
+    width: 200px;
+    height: 200px;
+  }
+
+  /* Disable grid overlay on mobile for perf */
+  .mesh-bg .grid-overlay {
+    display: none;
+  }
+
+  /* ——— MOBILE TYPOGRAPHY SHARPNESS ——— */
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Ensure text above blurred elements renders crisp */
+  .glass *,
+  .glass-light *,
+  .nav-floating * {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+  }
+
+  /* ——— MOBILE CARD LAYOUT FIXES ——— */
+
+  /* Home hero section */
+  .glass.rounded-3xl {
+    padding: 1.25rem;
+    border-radius: 1.25rem;
+  }
+
+  /* Stat counter cards inside home hero */
+  .glass.rounded-3xl .backdrop-blur-md {
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  /* ——— 3D SCROLL CARDS — MOBILE OPTIMIZED ——— */
+  .scroll-3d-card {
+    transform: none !important;
+    transition: opacity 0.4s ease-out, box-shadow 0.3s ease;
+  }
+
+  .scroll-3d-card:hover {
+    transform: none !important;
+    box-shadow: 0 8px 20px rgba(124, 58, 237, 0.15);
+  }
+
+  /* Disable 3D float animation on mobile */
+  .animate-float-3d {
+    animation: none;
+    transform: none;
+  }
+
+  /* ——— MOBILE BUTTON TOUCH TARGETS ——— */
+  .btn-primary {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Increase tap targets in nav */
+  .nav-floating button,
+  .nav-floating a {
+    min-height: 40px;
+    min-width: 40px;
+  }
+
+  /* ——— MOBILE GLOW REDUCTION ——— */
+  .glow-sm {
+    box-shadow: 0 0 8px rgba(124, 58, 237, 0.1);
+  }
+  .glow-md {
+    box-shadow: 0 0 16px rgba(124, 58, 237, 0.12);
+  }
+
+  /* Ambient radial glow — reduce size on mobile */
+  [class*="blur-3xl"] {
+    filter: blur(40px) !important;
+  }
+
+  /* ——— MOBILE IMAGE RENDERING ——— */
+  img {
+    image-rendering: -webkit-optimize-contrast;
+  }
+}
+
+/* ——— SMALL MOBILE (< 400px) EXTRA FIXES ——— */
+@media (max-width: 399px) {
+  .glass {
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+
+  .glass-light {
+    background: rgba(30, 41, 59, 0.8);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+
+  .mesh-bg .blob {
+    filter: blur(40px);
+    opacity: 0.06;
+  }
+  .mesh-bg .blob-1 { width: 200px; height: 200px; }
+  .mesh-bg .blob-2 { width: 180px; height: 180px; }
+  .mesh-bg .blob-3 { width: 150px; height: 150px; }
+}
+
+/* ——— TABLET OPTIMIZATIONS (768px-1024px) ——— */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .glass {
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  .mesh-bg .blob {
+    filter: blur(80px);
+    opacity: 0.1;
+  }
+}
+
+/* ——— TOUCH DEVICE: Disable hover-dependent visuals ——— */
+@media (pointer: coarse) {
+  /* Disable 3D tilt rotate on touch devices */
+  .scroll-3d-card:hover {
+    transform: none !important;
+  }
+
+  /* Reduce animations that rely on hover */
+  .group:hover .group-hover\:scale-105 {
+    transform: none;
+  }
+
+  /* Safe tap highlight */
+  button, a, [role="button"] {
+    -webkit-tap-highlight-color: rgba(124, 58, 237, 0.15);
+  }
+}
+
+/* ——— LANDSCAPE MOBILE FIX ——— */
+@media (max-height: 500px) and (orientation: landscape) {
+  .min-h-screen {
+    min-height: auto;
+  }
+}
+
+/* ——— FIX WEBKIT BLUR RENDERING BUG ——— 
+   Forces GPU layer promotion so text above 
+   backdrop-filter doesn't render blurry */
+@supports (backdrop-filter: blur(1px)) {
+  @media (max-width: 767px) {
+    .glass > *,
+    .glass-light > *,
+    .nav-floating > * {
+      will-change: transform;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+    }
+  }
+}

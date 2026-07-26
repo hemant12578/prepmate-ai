@@ -5,6 +5,7 @@ import { AppProvider } from './context/AppContext'
 import { AuthProvider } from './context/AuthContext'
 import PageErrorBoundary from './components/PageErrorBoundary'
 import './index.css'
+import './mobile.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

@@ -132,7 +132,7 @@ export default function About() {
         initial={{ opacity: 0, y: 30, scale: 0.97 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-        className="relative z-10 glass rounded-3xl p-8 sm:p-12 border border-purple-500/30 shadow-2xl overflow-hidden bg-gradient-to-r from-[#0d152e] via-[#0f172a] to-[#1a0b36]"
+        className="relative z-10 glass rounded-3xl p-5 sm:p-8 md:p-12 border border-purple-500/30 shadow-2xl overflow-hidden bg-gradient-to-r from-[#0d152e] via-[#0f172a] to-[#1a0b36]"
       >
         {/* Ambient Glow Orbs */}
         <div className="absolute -top-20 -right-20 w-80 h-80 bg-purple-500/20 rounded-full blur-3xl pointer-events-none" />
@@ -144,11 +144,11 @@ export default function About() {
               <Globe size={14} className="text-purple-400" />
               <span>Next-Gen AI Learning Platform</span>
             </div>
-            <h1 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight">
+            <h1 className="text-2xl sm:text-3xl md:text-5xl font-extrabold text-white tracking-tight leading-tight">
               Democratizing Personalized <br />
               <span className="text-gradient">AI Education</span>
             </h1>
-            <p className="text-slate-300 text-sm sm:text-base leading-relaxed max-w-xl">
+            <p className="text-slate-300 text-xs sm:text-sm md:text-base leading-relaxed max-w-xl">
               PrepMate AI combines 3D interactive graphics, Exam Mode PYQ analysis, official NCERT textbook integration, real-time rubric scoring, NotebookLM-style multi-source analysis, and corporate interview pressure simulation into a single, accessible platform.
             </p>
           </div>
@@ -177,9 +177,9 @@ export default function About() {
           <TiltCard
             key={i}
             options={{ max: 15, speed: 400, glare: true, 'max-glare': 0.2, scale: 1.03 }}
-            className="glass rounded-3xl p-6 border border-white/10 text-center space-y-1 hover:border-purple-500/30 transition-all shadow-xl bg-white/[0.02]"
+            className="glass rounded-2xl sm:rounded-3xl p-4 sm:p-6 border border-white/10 text-center space-y-1 hover:border-purple-500/30 transition-all shadow-xl bg-white/[0.02]"
           >
-            <p className={`text-3xl sm:text-4xl font-extrabold ${stat.color}`}>
+            <p className={`text-2xl sm:text-3xl md:text-4xl font-extrabold ${stat.color}`}>
               <AnimatedCounter end={stat.value} />
               <span className="text-xl sm:text-2xl font-bold">{stat.suffix}</span>
             </p>
@@ -192,7 +192,7 @@ export default function About() {
       <div className="relative z-10 space-y-6">
         <div className="text-center space-y-1">
           <h2 className="text-2xl font-extrabold text-white">Core Platform Pillars</h2>
-          <p className="text-xs text-slate-400">Hover over any card to experience hardware-accelerated 3D perspective tilt.</p>
+          <p className="text-xs text-slate-400">Tap or hover over any card to experience 3D perspective tilt.</p>
         </div>
 
         <motion.div
