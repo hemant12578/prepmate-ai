@@ -5,9 +5,10 @@ const API_URL = 'https://openrouter.ai/api/v1/chat/completions'
 
 const MODELS = [
   'openrouter/auto',
-  'meta-llama/llama-3.1-8b-instruct:free',
-  'google/gemma-2-9b-it:free',
-  'qwen/qwen-2.5-7b-instruct:free',
+  'meta-llama/llama-3.1-8b-instruct',
+  'qwen/qwen-2.5-7b-instruct',
+  'deepseek/deepseek-r1',
+  'meta-llama/llama-3.3-70b-instruct',
 ]
 
 function headers() {
@@ -21,8 +22,25 @@ function headers() {
   return h
 }
 
+async function callPollinationsAI(prompt, systemPrompt = '') {
+  let content = prompt
+  if (systemPrompt) content = `${systemPrompt}\n\n${prompt}`
+
+  const res = await fetch('https://text.pollinations.ai/', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      messages: [{ role: 'user', content }]
+    })
+  })
+  if (!res.ok) throw new Error(`Pollinations HTTP ${res.status}`)
+  const text = await res.text()
+  if (!text || text.length < 5) throw new Error('Pollinations empty response')
+  return text.trim()
+}
+
 /**
- * Call OpenRouter with automatic model fallback.
+ * Call OpenRouter with automatic model fallback & Pollinations backup.
  * @param {string} prompt - User prompt
  * @param {Object} opts - Options
  * @param {string} opts.system - System prompt (merged into user prompt for free model compat)
@@ -54,20 +72,24 @@ export async function callAI(prompt, { system = '', maxTokens = 1024, timeout = 
 
     if (!res.ok) {
       if (attempt < MODELS.length - 1) return callAI(prompt, { system, maxTokens, timeout }, attempt + 1)
-      throw new Error(`API ${res.status}`)
+      return callPollinationsAI(prompt, system)
     }
 
     const data = await res.json()
     const text = data.choices?.[0]?.message?.content
     if (!text) {
       if (attempt < MODELS.length - 1) return callAI(prompt, { system, maxTokens, timeout }, attempt + 1)
-      throw new Error('Empty response')
+      return callPollinationsAI(prompt, system)
     }
     return text.trim()
   } catch (err) {
     clearTimeout(timer)
     if (attempt < MODELS.length - 1) return callAI(prompt, { system, maxTokens, timeout }, attempt + 1)
-    throw err
+    try {
+      return await callPollinationsAI(prompt, system)
+    } catch {
+      throw err
+    }
   }
 }
 
