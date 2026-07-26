@@ -1,4 +1,3 @@
-import { PRESET_TOPICS } from '../data/presetQuestions'
 
 const API_URL = 'https://openrouter.ai/api/v1/chat/completions'
 
@@ -160,23 +159,8 @@ Return ONLY a JSON object in this exact format, no other text:
       type: result.type || interviewType,
     }
   } catch (err) {
-    console.warn('AI call failed, utilizing preset topic fallback:', err)
-    const normalized = topic.toLowerCase().trim()
-    const preset = PRESET_TOPICS.find(p => normalized.includes(p.title.toLowerCase()) || p.title.toLowerCase().includes(normalized))
-    if (preset && preset.questions.length > 0) {
-      const idx = (questionNum - 1) % preset.questions.length
-      const item = preset.questions[idx]
-      return {
-        question: item.question,
-        format: item.options ? 'mcq' : 'subjective',
-        options: item.options || null,
-        correctAnswer: item.correctAnswer || null,
-        difficulty: item.difficulty || difficulty,
-        hint: item.hint || '',
-        type: preset.type || interviewType
-      }
-    }
-    throw err
+    console.error('AI question generation failed:', err.message)
+    throw new Error('Could not generate question. Please check your internet connection and try again.')
   }
 }
 

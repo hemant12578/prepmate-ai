@@ -140,22 +140,8 @@ Return ONLY a JSON object in this exact format:
       difficulty: difficulty
     }
   } catch (e) {
-    console.warn('Study question generation failed, using format-matching fallback:', e)
-    const isMcqFormat = effectiveFormat === 'mcq'
-    return {
-      question: isMcqFormat
-        ? `Which of the following best describes the core function of ${topic} in ${subject}?`
-        : `What are the fundamental principles and key definitions of ${topic} in ${subject}?`,
-      format: effectiveFormat,
-      options: isMcqFormat ? [
-        `A) Key biological/physical process governing ${topic}`,
-        `B) Secondary metabolic or structural component`,
-        `C) External environmental catalyst`,
-        `D) Non-essential auxiliary feature`
-      ] : null,
-      hint: 'Recall the main formulas and textbook chapter definitions.',
-      difficulty: difficulty
-    }
+    console.error('Study question generation failed:', e.message)
+    throw new Error('Could not generate question. Please check your internet connection and try again.')
   }
 }
 
@@ -192,18 +178,8 @@ Score should be 1-10.`
       encouragement: result.encouragement || 'Great job! Keep up the solid effort.'
     }
   } catch (e) {
-    // Instant fallback evaluation when network is slow
-    const wordCount = userAnswer ? userAnswer.trim().split(/\s+/).length : 0
-    const heuristicScore = Math.min(10, Math.max(5, Math.round(wordCount * 0.8) + 4))
-    return {
-      score: heuristicScore,
-      whatYouGotRight: 'Demonstrated good understanding of the primary concept.',
-      whatYouMissed: 'Could expand with additional specific examples and definitions.',
-      conceptExplanation: `Mastering ${topic} requires connecting basic definitions with real-world applications.`,
-      memoryTrick: 'Key Rule: Summarize main concepts in 3 concise bullet points.',
-      studyThisNext: `Next subtopic in ${subject}.`,
-      encouragement: 'Solid attempt! Continuous practice leads to mastery.'
-    }
+    console.error('Answer evaluation failed:', e.message)
+    throw new Error('Could not evaluate your answer. Please try again.')
   }
 }
 

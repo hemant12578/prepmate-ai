@@ -1,21 +1,23 @@
 import { useState } from 'react'
 import { generateAudioScript } from '../../services/smartnotes'
 import { useAudioOverview } from '../../hooks/useAudioOverview'
-import { Play, Pause, Square, Volume2, Sparkles, Loader2 } from 'lucide-react'
+import { Play, Pause, Square, Volume2, Sparkles, Loader2, AlertTriangle, RotateCw } from 'lucide-react'
 
 export default function AudioOverview({ docText }) {
   const [script, setScript] = useState('')
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
   const { isSupported, isPlaying, voices, selectedVoice, setSelectedVoice, rate, setRate, progress, speak, pause, resume, stop } = useAudioOverview()
 
   const handleGenerate = async () => {
     if (!docText) return
     setLoading(true)
+    setError(null)
     try {
       const res = await generateAudioScript(docText)
       setScript(res)
     } catch (err) {
-      console.warn('Audio script generation failed:', err)
+      setError(err.message || 'Failed to generate audio overview.')
     } finally {
       setLoading(false)
     }
@@ -35,6 +37,25 @@ export default function AudioOverview({ docText }) {
         <Loader2 className="animate-spin text-purple-400 mb-4" size={32} />
         <p className="text-sm font-semibold text-white mb-1">Writing Educational Audio Overview...</p>
         <p className="text-xs text-slate-400">Creating a 2-3 minute podcast-style spoken overview script.</p>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="glass rounded-3xl p-10 text-center animate-in border border-red-500/20">
+        <div className="w-14 h-14 rounded-2xl bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-400 mx-auto mb-4">
+          <AlertTriangle size={28} />
+        </div>
+        <h3 className="text-lg font-bold text-white mb-2">Generation Failed</h3>
+        <p className="text-xs text-red-300 mb-6 max-w-sm mx-auto">{error}</p>
+        <button
+          onClick={handleGenerate}
+          className="btn-primary px-6 py-3 rounded-2xl text-xs font-semibold text-white inline-flex items-center gap-2 shadow-lg shadow-purple-500/20"
+        >
+          <RotateCw size={14} />
+          <span>Try Again</span>
+        </button>
       </div>
     )
   }

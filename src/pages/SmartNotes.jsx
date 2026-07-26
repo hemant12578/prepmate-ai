@@ -34,6 +34,7 @@ export default function SmartNotes() {
   const [activeTab, setActiveTab] = useState('summary') // 'summary', 'flashcards', 'chat', 'audio'
   const [summary, setSummary] = useState(null)
   const [summaryLoading, setSummaryLoading] = useState(false)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
     try {
@@ -69,12 +70,13 @@ export default function SmartNotes() {
   const handleGenerateSummary = async () => {
     if (!combinedText) return
     setSummaryLoading(true)
+    setError(null)
     try {
       const res = await generateDocSummary(combinedText)
       setSummary(res)
       setActiveTab('summary')
     } catch (err) {
-      console.warn('Summary generation error:', err)
+      setError(err.message || 'Failed to generate summary. Please try again.')
     } finally {
       setSummaryLoading(false)
     }
@@ -240,7 +242,7 @@ export default function SmartNotes() {
             /* PERSISTENT TAB VIEWS: Mounted simultaneously with CSS visibility toggle to preserve state */
             <div className="min-h-[400px]">
               <div className={activeTab === 'summary' ? 'block' : 'hidden'}>
-                <SummaryView summary={summary} loading={summaryLoading} onGenerate={handleGenerateSummary} />
+                <SummaryView summary={summary} loading={summaryLoading} onGenerate={handleGenerateSummary} error={error} />
               </div>
 
               <div className={activeTab === 'flashcards' ? 'block' : 'hidden'}>

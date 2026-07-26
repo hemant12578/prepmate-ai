@@ -182,23 +182,6 @@ export default function AddSourceModal({ isOpen, onClose, onAddSource }) {
     onClose()
   }
 
-  // Preset YouTube Sample Handlers
-  const handlePresetSample = (sampleUrl, title, textContent) => {
-    const vId = extractVideoId(sampleUrl) || 'gpPFG_FBTDQ'
-    onAddSource({
-      id: 'src_' + Date.now(),
-      type: 'youtube',
-      name: title,
-      text: textContent,
-      charCount: textContent.length,
-      selected: true,
-      addedAt: new Date(),
-      videoId: vId,
-      thumbnailUrl: `https://img.youtube.com/vi/${vId}/mqdefault.jpg`
-    })
-    onClose()
-  }
-
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in">
       <div className="glass rounded-3xl p-6 sm:p-8 max-w-xl w-full border border-purple-500/30 shadow-2xl relative max-h-[90vh] overflow-y-auto">
@@ -389,54 +372,7 @@ export default function AddSourceModal({ isOpen, onClose, onAddSource }) {
               <p className="text-xs text-red-400">{ytError}</p>
             )}
 
-            {/* Quick Sample Preset Buttons */}
-            <div className="p-3 rounded-2xl bg-white/[0.02] border border-white/[0.05]">
-              <p className="text-[11px] font-semibold text-slate-400 mb-2 flex items-center gap-1">
-                <Wand2 size={12} className="text-purple-400" />
-                <span>Or add a sample educational lecture in 1-click:</span>
-              </p>
-              <div className="flex flex-wrap gap-1.5">
-                <button
-                  onClick={() => handlePresetSample(
-                    'https://www.youtube.com/watch?v=gpPFG_FBTDQ',
-                    'YouTube: Data Structures & Algorithms',
-                    `[Lecture: Introduction to Data Structures & Algorithms]
-Welcome to this lecture on Data Structures and Algorithms. Today we explore Arrays, Linked Lists, Stacks, Queues, Binary Search Trees, and Hash Tables.
-Arrays provide O(1) indexed access. Linked lists use pointers for dynamic memory. Stacks operate as LIFO, Queues operate as FIFO.
-Binary Search Trees maintain sorted order enabling logarithmic search O(log N). Big O notation measures time and space efficiency.`
-                  )}
-                  className="px-2.5 py-1 rounded-lg bg-purple-500/10 hover:bg-purple-500/20 text-purple-300 text-[11px] font-medium border border-purple-500/20 transition-colors"
-                >
-                  ▶ DSA Lecture
-                </button>
 
-                <button
-                  onClick={() => handlePresetSample(
-                    'https://www.youtube.com/watch?v=8j0UDiN7my4',
-                    'YouTube: React Web Development',
-                    `[Lecture: Modern Web Development with React]
-Welcome to Modern Web Development. React is a component-driven JavaScript UI framework built on declarative state management and a Virtual DOM.
-Key concepts covered: JSX syntax, Functional Components, useState for reactive UI updates, useEffect for side-effect lifecycles, Context API, and modular CSS styling.`
-                  )}
-                  className="px-2.5 py-1 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 text-blue-300 text-[11px] font-medium border border-blue-500/20 transition-colors"
-                >
-                  ▶ React Web Dev
-                </button>
-
-                <button
-                  onClick={() => handlePresetSample(
-                    'https://www.youtube.com/watch?v=aircAruvnKk',
-                    'YouTube: Neural Networks & AI',
-                    `[Lecture: Deep Learning & Neural Networks]
-In this deep learning lecture, we explore Artificial Neural Networks, Feedforward Propagation, Activation Functions (ReLU, Sigmoid), Backpropagation, and Gradient Descent optimization.
-Convolutional Neural Networks (CNNs) process image grids, while Transformers with Self-Attention power modern Large Language Models.`
-                  )}
-                  className="px-2.5 py-1 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 text-[11px] font-medium border border-emerald-500/20 transition-colors"
-                >
-                  ▶ AI & Neural Networks
-                </button>
-              </div>
-            </div>
 
             {!showManualPaste ? (
               <button

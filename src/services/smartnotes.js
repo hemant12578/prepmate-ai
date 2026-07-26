@@ -111,17 +111,8 @@ ${textSample}`
     const response = await callAI(prompt)
     return parseJSONResponse(response)
   } catch (e) {
-    console.warn('generateDocSummary failed, using smart fallback:', e)
-    const lines = textSample.split('\n').filter(l => l.trim().length > 20)
-    return {
-      _isFallback: true,
-      title: 'Notes Executive Summary',
-      oneLiner: lines[0] || 'Summary generated from uploaded document notes.',
-      keyPoints: lines.slice(1, 7).map(l => l.trim()),
-      mainConcepts: ['Key Term: Primary concept extracted from notes', 'Overview: Comprehensive breakdown of subject matter'],
-      studyGuide: `Study Guide Summary:\n\n1. Overview: This document covers key concepts and practice material.\n2. Review Focus: Pay close attention to definitions, formulas, and structural relationships described in the notes.\n3. Next Steps: Test yourself using the Flashcards tab and Chat assistant.`,
-      difficulty: 'Intermediate'
-    }
+    console.error('Summary generation failed:', e.message)
+    throw new Error('Could not generate summary. Please check your internet connection and try again.')
   }
 }
 
@@ -146,17 +137,8 @@ ${textSample}`
     }
     throw new Error('Response was not an array')
   } catch (e) {
-    console.warn('generateFlashcards failed, using fallback cards:', e)
-    const snippets = textSample.split(/\.\s+/).filter(s => s.trim().length > 30).slice(0, 6)
-    return [
-      { _isFallback: true, front: 'What is the main topic of this document?', back: textSample.slice(0, 150) + '...', category: 'Overview' },
-      ...snippets.map((snip, i) => ({
-        _isFallback: true,
-        front: `Key Concept ${i + 1}`,
-        back: snip.trim(),
-        category: 'Concept Review'
-      }))
-    ]
+    console.error('Flashcard generation failed:', e.message)
+    throw new Error('Could not generate flashcards. Please check your internet connection and try again.')
   }
 }
 
@@ -180,31 +162,8 @@ export async function chatWithDocument(docText, historyMessages, userMessage) {
     if (res && res.length > 5) return res
     throw new Error('Empty AI response')
   } catch (e) {
-    console.warn('chatWithDocument AI call failed, using intelligent doc extraction fallback:', e)
-    const cleanText = textSample.trim()
-    const qLower = (userMessage || '').toLowerCase()
-
-    if (qLower.includes('summary') || qLower.includes('main idea')) {
-      return `Based on your uploaded notes, here is the core summary:\n\n${cleanText.slice(0, 450)}...`
-    }
-    if (qLower.includes('question') || qLower.includes('practice')) {
-      return `Here are key review questions generated from your document:\n\n1. What are the key concepts and principles outlined in this material?\n2. How do the foundational ideas connect to practical applications?\n3. What critical formulas or definitions should be memorized?`
-    }
-    if (qLower.includes('concept') || qLower.includes('hardest') || qLower.includes('explain')) {
-      return `Key concept analysis from your document:\n\n"${cleanText.slice(0, 400)}..."\n\nFocus on understanding the relationships between these core ideas for exam preparation.`
-    }
-
-    // Keyword matching fallback
-    const keywords = qLower.split(/\s+/).filter(w => w.length > 3)
-    const matchingSentences = cleanText.split(/\.\s+/).filter(sentence => 
-      keywords.some(kw => sentence.toLowerCase().includes(kw))
-    )
-
-    if (matchingSentences.length > 0) {
-      return `Here is the relevant excerpt from your notes:\n\n"${matchingSentences.slice(0, 3).join('. ')}."`
-    }
-
-    return `Based on your document notes:\n\n"${cleanText.slice(0, 380)}..."\n\n(Tip: Feel free to ask specific questions about definitions, terms, or sections in your notes!)`
+    console.error('Chat failed:', e.message)
+    throw new Error('AI is currently unavailable. Please try again in a moment.')
   }
 }
 
@@ -221,7 +180,7 @@ Return ONLY plain spoken text script.`
     if (script && script.length > 50) return script
     throw new Error('Script too short')
   } catch (e) {
-    console.warn('generateAudioScript fallback:', e)
-    return `[AI Unavailable] Hey! Welcome to your PrepMate AI audio overview. Today we are reviewing your uploaded study notes. The key takeaway from your material is: ${textSample.slice(0, 400)}... Make sure to review the flashcards and practice questions to master this topic. Keep up the great work!`
+    console.error('Audio script generation failed:', e.message)
+    throw new Error('Could not generate audio script. Please check your internet connection and try again.')
   }
 }

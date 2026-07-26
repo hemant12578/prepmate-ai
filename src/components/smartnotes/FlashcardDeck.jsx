@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { generateFlashcards } from '../../services/smartnotes'
-import { RotateCw, ChevronLeft, ChevronRight, Check, X, Sparkles, Loader2, Trophy } from 'lucide-react'
+import { RotateCw, ChevronLeft, ChevronRight, Check, X, Sparkles, Loader2, Trophy, AlertTriangle } from 'lucide-react'
 
 export default function FlashcardDeck({ docText }) {
   const [cards, setCards] = useState([])
@@ -8,10 +8,12 @@ export default function FlashcardDeck({ docText }) {
   const [currentIdx, setCurrentIdx] = useState(0)
   const [isFlipped, setIsFlipped] = useState(false)
   const [cardStatus, setCardStatus] = useState({}) // { [idx]: 'gotIt' | 'review' }
+  const [error, setError] = useState(null)
 
   const handleGenerate = async () => {
     if (!docText) return
     setLoading(true)
+    setError(null)
     try {
       const res = await generateFlashcards(docText)
       setCards(res)
@@ -19,7 +21,7 @@ export default function FlashcardDeck({ docText }) {
       setIsFlipped(false)
       setCardStatus({})
     } catch (err) {
-      console.warn('Flashcards generation failed:', err)
+      setError(err.message || 'Failed to generate flashcards.')
     } finally {
       setLoading(false)
     }
@@ -31,6 +33,25 @@ export default function FlashcardDeck({ docText }) {
         <Loader2 className="animate-spin text-purple-400 mb-4" size={32} />
         <p className="text-sm font-semibold text-white mb-1">Crafting Smart Flashcards...</p>
         <p className="text-xs text-slate-400">Creating 10-15 conceptual flashcards from your notes.</p>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="glass rounded-3xl p-10 text-center animate-in border border-red-500/20">
+        <div className="w-14 h-14 rounded-2xl bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-400 mx-auto mb-4">
+          <AlertTriangle size={28} />
+        </div>
+        <h3 className="text-lg font-bold text-white mb-2">Generation Failed</h3>
+        <p className="text-xs text-red-300 mb-6 max-w-sm mx-auto">{error}</p>
+        <button
+          onClick={handleGenerate}
+          className="btn-primary px-6 py-3 rounded-2xl text-xs font-semibold text-white inline-flex items-center gap-2 shadow-lg shadow-purple-500/20"
+        >
+          <RotateCw size={14} />
+          <span>Try Again</span>
+        </button>
       </div>
     )
   }
@@ -67,12 +88,6 @@ export default function FlashcardDeck({ docText }) {
 
   return (
     <div className="animate-in max-w-xl mx-auto space-y-6">
-      {cards.some(c => c._isFallback) && (
-        <div className="px-3 py-2 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-300 flex items-center gap-2 mb-3">
-          <span>⚠️</span>
-          <span>AI was unavailable — showing text-extracted cards. Click "Regenerate Deck" for AI-powered flashcards.</span>
-        </div>
-      )}
       {/* Top Progress & Regenerate Bar */}
       <div className="glass rounded-2xl p-4 flex items-center justify-between text-xs border border-white/5 gap-3">
         <span className="text-slate-400 shrink-0">Progress: <strong className="text-white">{gotItCount}/{totalCards} Mastered</strong></span>

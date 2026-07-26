@@ -68,16 +68,8 @@ export const fetchYouTubeTranscript = async (url) => {
     console.warn('AI transcript generation failed:', err)
   }
 
-  // Guaranteed Default Lecture Transcript (never fails)
-  const defaultText = `[Lecture Transcript: ${title}]
-Welcome to this lecture video on ${title}. In this session, we cover the essential concepts, fundamental principles, practical examples, and core problem-solving methodologies associated with this topic.
-Key topics discussed in this video:
-1. Introduction & Background Overview: Fundamental principles and definitions.
-2. Core Technical Mechanics: Step-by-step breakdown of key processes and operations.
-3. Practical Application & Examples: Real-world implementation, trade-offs, and best practices.
-4. Summary & Takeaways: Review of critical points for study and examination preparation.`
-
-  return { text: defaultText, videoId, title }
+  // All transcript methods failed
+  throw new Error(`Could not fetch transcript for "${title}". Try pasting the transcript manually.`)
 }
 
 export const generateAITranscriptFromVideo = async (videoId, videoUrl, title = '') => {
