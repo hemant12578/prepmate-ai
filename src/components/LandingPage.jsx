@@ -98,7 +98,7 @@ export default function LandingPage() {
     },
     {
       q: 'Is PrepMate AI free to use?',
-      a: '100% free! Simply sign in with your Google account to access all features, study modes, voice recognition, and performance summaries.'
+      a: 'PrepMate AI offers a 100% Free Tier with 10 practice questions and study sessions per day. For unlimited practice, SmartNotes AI, Voice Viva, and 90s Pressure Mode, explore our PRO and ELITE plans on the Pricing page.'
     }
   ]
 
@@ -405,7 +405,7 @@ export default function LandingPage() {
             <p className="text-3xl sm:text-4xl font-extrabold text-purple-400 mb-1">
               <AnimatedCounter end={100} suffix="%" />
             </p>
-            <p className="text-[11px] sm:text-xs text-slate-400 uppercase tracking-wider font-medium">Free Access</p>
+            <p className="text-[11px] sm:text-xs text-slate-400 uppercase tracking-wider font-medium">Free Tier Available</p>
           </div>
           <div>
             <p className="text-3xl sm:text-4xl font-extrabold text-blue-400 mb-1">
@@ -602,7 +602,7 @@ export default function LandingPage() {
               className="btn-primary px-8 py-4 rounded-2xl text-white font-semibold text-sm inline-flex items-center gap-3 shadow-xl hover:scale-105 transition-all"
             >
               {loading ? <Loader2 size={18} className="animate-spin" /> : <GoogleIcon />}
-              <span>Get Started Now — It's Free</span>
+              <span>Get Started Free — Upgrade Anytime</span>
             </button>
           </div>
         </motion.div>

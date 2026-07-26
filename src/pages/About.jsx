@@ -76,14 +76,14 @@ export default function About() {
       bg: 'bg-blue-500/10 border-blue-500/20',
       gradient: 'from-[#071329] to-[#030914]',
       title: 'Enterprise Multi-Model OpenRouter Architecture',
-      desc: 'Powered by an automated failover chain prioritizing free and high-performance AI models for sub-second, resilient response generation.'
+      desc: 'Powered by an automated failover chain prioritizing high-performance AI models for sub-second, resilient response generation.'
     }
   ]
 
   const stats3D = [
     { label: 'AI Models', value: 5, suffix: '+', color: 'text-purple-400' },
     { label: 'NCERT Grades', value: 12, suffix: ' Classes', color: 'text-teal-400' },
-    { label: 'Free Access', value: 100, suffix: '%', color: 'text-emerald-400' },
+    { label: 'Pricing Plans', value: 3, suffix: ' Tiers', color: 'text-emerald-400' },
     { label: 'Avg Latency', value: 1.2, suffix: 's', color: 'text-amber-400' }
   ]
 
@@ -93,6 +93,7 @@ export default function About() {
     { name: 'Tailwind CSS', category: 'Design System', desc: 'Custom glassmorphism design tokens & 3D CSS perspective transforms' },
     { name: 'Firebase v10 Auth', category: 'Authentication', desc: 'Google Single Sign-On and user identity management' },
     { name: 'OpenRouter AI API', category: 'Multi-Model AI', desc: 'Smart fallback routing across LLaMA, Gemma, and Claude' },
+    { name: 'Razorpay Gateway', category: 'Monetization', desc: 'Secure UPI, Cards, NetBanking payments with HMAC-SHA256 signature verification for PRO & ELITE plans' },
     { name: 'pdfjs-dist', category: 'Document Processing', desc: 'Client-side PDF page-by-page text extraction for PYQ papers' },
     { name: 'Tesseract.js OCR', category: 'Vision & OCR', desc: 'Client-side optical character recognition for textbook photos' },
     { name: 'NCERT Syllabus Database', category: 'Curriculum Standards', desc: 'Official chapter mapping and NCERT PDF download links' },
