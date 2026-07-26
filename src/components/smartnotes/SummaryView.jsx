@@ -62,6 +62,12 @@ export default function SummaryView({ summary, loading, onGenerate }) {
         </div>
         <h2 className="text-2xl font-bold text-white mb-2">{summary.title || 'Document Summary'}</h2>
         <p className="text-sm text-slate-300 italic leading-relaxed">{summary.oneLiner}</p>
+        {summary._isFallback && (
+          <div className="mt-3 px-3 py-2 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-300 flex items-center gap-2">
+            <span>⚠️</span>
+            <span>AI was unavailable — showing extracted content. Click "Regenerate Summary" for AI-powered analysis.</span>
+          </div>
+        )}
       </div>
 
       {/* Key Takeaways */}

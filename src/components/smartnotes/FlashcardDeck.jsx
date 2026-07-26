@@ -67,6 +67,12 @@ export default function FlashcardDeck({ docText }) {
 
   return (
     <div className="animate-in max-w-xl mx-auto space-y-6">
+      {cards.some(c => c._isFallback) && (
+        <div className="px-3 py-2 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-300 flex items-center gap-2 mb-3">
+          <span>⚠️</span>
+          <span>AI was unavailable — showing text-extracted cards. Click "Regenerate Deck" for AI-powered flashcards.</span>
+        </div>
+      )}
       {/* Top Progress & Regenerate Bar */}
       <div className="glass rounded-2xl p-4 flex items-center justify-between text-xs border border-white/5 gap-3">
         <span className="text-slate-400 shrink-0">Progress: <strong className="text-white">{gotItCount}/{totalCards} Mastered</strong></span>

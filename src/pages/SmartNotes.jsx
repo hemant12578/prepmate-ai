@@ -80,6 +80,13 @@ export default function SmartNotes() {
     }
   }
 
+  // Auto-generate summary when sources are first selected
+  useEffect(() => {
+    if (combinedText && !summary && !summaryLoading) {
+      handleGenerateSummary()
+    }
+  }, [combinedText])
+
   const tabs = [
     { id: 'summary', label: 'Summary', icon: BookOpen },
     { id: 'flashcards', label: 'Flashcards', icon: RotateCw },

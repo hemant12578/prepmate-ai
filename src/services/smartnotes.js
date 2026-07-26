@@ -159,10 +159,19 @@ ${textSample}`
 }
 
 export async function chatWithDocument(docText, historyMessages, userMessage) {
-  const textSample = (docText || '').slice(0, 8000)
-  const systemPrompt = `You are an expert AI study tutor. Answer the student's question based strictly on the provided document notes. If the answer is not mentioned, provide the best relevant explanation from the document context.`
+  const textSample = (docText || '').slice(0, 6000)
+  const systemPrompt = `You are an expert AI study tutor. Answer the student's question based on the provided document notes. Be helpful, clear, and educational. If the answer isn't directly in the document, provide the best relevant explanation.`
 
-  const prompt = `Document Context:\n${textSample}\n\nStudent Question: ${userMessage}`
+  // Build conversation context from history (last 6 messages for context window)
+  const recentHistory = (historyMessages || []).slice(-6)
+  let historyContext = ''
+  if (recentHistory.length > 1) {
+    historyContext = '\n\nConversation History:\n' + recentHistory.map(m => 
+      `${m.role === 'user' ? 'Student' : 'Tutor'}: ${m.text}`
+    ).join('\n') + '\n'
+  }
+
+  const prompt = `Document Context:\n${textSample}${historyContext}\n\nStudent Question: ${userMessage}\n\nProvide a clear, helpful answer:`
   
   try {
     const res = await callAI(prompt, systemPrompt)
@@ -211,6 +220,6 @@ Return ONLY plain spoken text script.`
     throw new Error('Script too short')
   } catch (e) {
     console.warn('generateAudioScript fallback:', e)
-    return `Hey! Welcome to your PrepMate AI audio overview. Today we are reviewing your uploaded study notes. The key takeaway from your material is: ${textSample.slice(0, 400)}... Make sure to review the flashcards and practice questions to master this topic. Keep up the great work!`
+    return `[AI Unavailable] Hey! Welcome to your PrepMate AI audio overview. Today we are reviewing your uploaded study notes. The key takeaway from your material is: ${textSample.slice(0, 400)}... Make sure to review the flashcards and practice questions to master this topic. Keep up the great work!`
   }
 }
