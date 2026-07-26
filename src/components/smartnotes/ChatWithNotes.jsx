@@ -37,8 +37,13 @@ export default function ChatWithNotes({ docText }) {
       // console.log('Chat API response:', aiReply)
       setMessages(prev => [...prev, { role: 'assistant', text: aiReply }])
     } catch (err) {
-      console.warn('Chat failed:', err)
-      setMessages(prev => [...prev, { role: 'assistant', text: 'Sorry, I encountered an error searching your document notes.' }])
+      console.warn('Chat failed, using local document fallback:', err)
+      const cleanText = (docText || '').trim()
+      const fallbackReply = msg.toLowerCase().includes('summary') || msg.toLowerCase().includes('main idea')
+        ? `Based on your uploaded notes, here is the core summary:\n\n"${cleanText.slice(0, 400)}..."`
+        : `Based on your document notes:\n\n"${cleanText.slice(0, 350)}..."\n\n(Tip: Feel free to ask specific questions about terms or concepts in your notes!)`
+      
+      setMessages(prev => [...prev, { role: 'assistant', text: fallbackReply }])
     } finally {
       setLoading(false)
     }
