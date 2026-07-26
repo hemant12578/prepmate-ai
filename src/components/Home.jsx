@@ -231,7 +231,7 @@ export default function Home() {
           </div>
 
           {/* REAL COMPUTED STAT COUNTERS */}
-          <div className="grid grid-cols-3 gap-2 sm:gap-3 w-full md:w-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3 w-full md:w-auto">
             <div className="p-3 sm:p-4 rounded-2xl bg-white/[0.05] border border-white/[0.08] text-center">
               <div className="flex items-center justify-center gap-1 text-amber-400 mb-1">
                 <Flame size={14} />

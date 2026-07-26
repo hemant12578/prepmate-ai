@@ -201,7 +201,7 @@ export default function AddSourceModal({ isOpen, onClose, onAddSource }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in">
-      <div className="glass rounded-3xl p-6 sm:p-8 max-w-xl w-full border border-purple-500/30 shadow-2xl relative">
+      <div className="glass rounded-3xl p-6 sm:p-8 max-w-xl w-full border border-purple-500/30 shadow-2xl relative max-h-[90vh] overflow-y-auto">
         {/* Close Button */}
         <button
           onClick={onClose}
@@ -217,7 +217,7 @@ export default function AddSourceModal({ isOpen, onClose, onAddSource }) {
         </div>
 
         {/* 4 Tabs Grid */}
-        <div className="grid grid-cols-4 gap-1.5 bg-white/[0.03] p-1.5 rounded-2xl border border-white/[0.06] mb-6">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 bg-white/[0.03] p-1.5 rounded-2xl border border-white/[0.06] mb-6">
           <button
             onClick={() => setActiveTab('pdf')}
             className={`py-2 px-2.5 rounded-xl text-xs font-semibold transition-all flex items-center justify-center gap-1.5 ${

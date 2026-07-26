@@ -98,7 +98,7 @@ export default function StudyQuestion({ questionData, currentQ, totalQ, onSubmit
 
         {/* True / False Format */}
         {isTrueFalse && (
-          <div className="grid grid-cols-2 gap-4 mb-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
             {['True ✓', 'False ✗'].map((val) => (
               <button
                 key={val}

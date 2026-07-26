@@ -35,7 +35,7 @@ function StarFormatCheck({ starCheck }) {
         <BarChart3 size={14} />
         <span>STAR Format Structural Check</span>
       </h4>
-      <div className="grid grid-cols-2 gap-2">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
         {items.map(({ key, label }) => {
           const isPassed = !!starCheck[key]
           return (

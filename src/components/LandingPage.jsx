@@ -488,7 +488,7 @@ export default function LandingPage() {
             </div>
 
             {/* App preview — show study/interview/notes images in a grid */}
-            <div className="bg-[#0b1226] p-6 grid grid-cols-3 gap-4">
+            <div className="bg-[#0b1226] p-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
               <img src="/assets/study_mode.jpg" alt="Study Mode" className="rounded-xl w-full h-36 sm:h-48 object-cover border border-white/5" />
               <img src="/assets/interview_mode.jpg" alt="Interview Mode" className="rounded-xl w-full h-36 sm:h-48 object-cover border border-white/5" />
               <img src="/assets/smart_notes.jpg" alt="Smart Notes" className="rounded-xl w-full h-36 sm:h-48 object-cover border border-white/5" />

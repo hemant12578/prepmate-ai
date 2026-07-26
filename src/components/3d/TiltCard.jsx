@@ -4,8 +4,10 @@ export default function TiltCard({ children, className = '', onClick }) {
   const [transform, setTransform] = useState('')
   const [glarePos, setGlarePos] = useState({ x: 50, y: 50, opacity: 0 })
 
+  const isTouch = typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches
+
   const handleMouseMove = (e) => {
-    if (typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches) return
+    if (isTouch) return
 
     const rect = e.currentTarget.getBoundingClientRect()
     const x = e.clientX - rect.left
@@ -35,7 +37,7 @@ export default function TiltCard({ children, className = '', onClick }) {
       onClick={onClick}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className={`relative transition-transform duration-200 ease-out ${className}`}
+      className={`relative transition-transform duration-200 ease-out ${isTouch ? 'hover:scale-[1.02]' : ''} ${className}`}
       style={{
         transform: transform || 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)',
         transformStyle: 'preserve-3d'

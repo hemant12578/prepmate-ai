@@ -135,7 +135,7 @@ function App() {
         initial={{ y: -80, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-        className="fixed top-0 left-0 right-0 z-40 glass border-b border-white/5"
+        className="fixed top-0 left-0 right-0 z-40 glass border-b border-white/5 pt-[env(safe-area-inset-top)]"
       >
         <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
           <button
@@ -250,7 +250,7 @@ function App() {
 
         {/* Mobile Navigation Drawer */}
         {mobileMenuOpen && (
-          <div className="md:hidden border-b border-white/10 bg-[#0b1226]/95 backdrop-blur-xl px-6 py-4 space-y-3 animate-in">
+          <div className="md:hidden border-b border-white/10 bg-[#0b1226]/95 backdrop-blur-md px-6 py-4 space-y-3 animate-in">
             <button onClick={() => { setScreen('home'); setMobileMenuOpen(false) }}
               className="w-full text-left py-2 text-xs font-semibold text-slate-200 hover:text-purple-300 flex items-center gap-2">
               <Sparkles size={16} className="text-purple-400" /><span>Dashboard</span>

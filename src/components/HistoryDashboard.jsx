@@ -73,7 +73,7 @@ export default function HistoryDashboard() {
         </div>
 
         {/* Analytics Grid */}
-        <div className="grid grid-cols-3 gap-4 mt-8 pt-6 border-t border-white/5 text-center">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8 pt-6 border-t border-white/5 text-center">
           <div>
             <p className="text-2xl font-extrabold text-white">{totalSessions}</p>
             <p className="text-[11px] text-slate-400 uppercase tracking-wider">Completed Sessions</p>

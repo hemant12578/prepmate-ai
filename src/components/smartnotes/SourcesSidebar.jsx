@@ -56,7 +56,7 @@ export default function SourcesSidebar({
           <h3 className="text-sm font-bold text-white tracking-tight">Sources</h3>
         </div>
         {mobileOpen && (
-          <button onClick={onCloseMobile} className="p-1 rounded-lg text-slate-400 hover:text-white sm:hidden">
+          <button onClick={onCloseMobile} className="p-2.5 rounded-lg text-slate-400 hover:text-white sm:hidden">
             <X size={18} />
           </button>
         )}

@@ -177,7 +177,7 @@ export default function InterviewSetup() {
 
               <div>
                 <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Viva Style</label>
-                <div className="grid grid-cols-3 gap-2">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                   {['Oral Viva', 'Written Exam', 'Practical Based'].map((style) => (
                     <button
                       key={style}

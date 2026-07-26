@@ -37,7 +37,7 @@ export default function OnboardingModal({ isOpen, onClose }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in">
-      <div className="glass rounded-3xl p-8 max-w-lg w-full border border-purple-500/20 shadow-2xl relative">
+      <div className="glass rounded-3xl p-8 max-w-lg w-full border border-purple-500/20 shadow-2xl relative max-h-[90vh] overflow-y-auto">
         {/* Header */}
         <div className="text-center mb-8">
           <div className="w-12 h-12 rounded-2xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center mx-auto mb-4 text-purple-400">
@@ -114,7 +114,7 @@ export default function OnboardingModal({ isOpen, onClose }) {
                   <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
                     Select Your Education Board
                   </label>
-                  <div className="grid grid-cols-3 gap-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                     {['CBSE', 'ICSE', 'Bihar Board', 'UP Board', 'State Board', 'IB / IGCSE'].map((b) => (
                       <button
                         key={b}
@@ -152,7 +152,7 @@ export default function OnboardingModal({ isOpen, onClose }) {
                   <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
                     Your Grade / Class (Class 5 to 12+)
                   </label>
-                  <div className="grid grid-cols-4 gap-1.5">
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
                     {['Class 5', 'Class 6', 'Class 7', 'Class 8', 'Class 9', 'Class 10', 'Class 11', 'Class 12'].map((g) => (
                       <button
                         key={g}
@@ -192,7 +192,7 @@ export default function OnboardingModal({ isOpen, onClose }) {
                   <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
                     Experience Level
                   </label>
-                  <div className="grid grid-cols-3 gap-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                     {['Fresher', '1-3 Years', 'Senior Lead'].map((exp) => (
                       <button
                         key={exp}

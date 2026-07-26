@@ -204,7 +204,7 @@ export default function StudySetup() {
           </div>
 
           {/* 3 Top Category Tabs */}
-          <div className="grid grid-cols-3 gap-2 bg-white/[0.03] p-1.5 rounded-2xl border border-white/[0.06]">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 bg-white/[0.03] p-1.5 rounded-2xl border border-white/[0.06]">
             <button
               type="button"
               onClick={() => setTab('school')}

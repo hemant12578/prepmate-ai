@@ -112,7 +112,12 @@ export default function Hero3DCanvas({ height = '350px' }) {
       renderer.setSize(newW, newH)
     }
 
-    window.addEventListener('resize', handleResize)
+    let resizeTimer;
+    const debouncedResize = () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(handleResize, 150);
+    };
+    window.addEventListener('resize', debouncedResize)
 
     // Animation Loop
     let animationFrameId
@@ -143,7 +148,7 @@ export default function Hero3DCanvas({ height = '350px' }) {
     return () => {
       cancelAnimationFrame(animationFrameId)
       window.removeEventListener('mousemove', handleMouseMove)
-      window.removeEventListener('resize', handleResize)
+      window.removeEventListener('resize', debouncedResize)
       if (container.contains(renderer.domElement)) {
         container.removeChild(renderer.domElement)
       }

@@ -104,7 +104,7 @@ export default function Setup() {
         </div>
 
         {/* Category Tabs */}
-        <div className="grid grid-cols-3 gap-2 mb-8 bg-white/[0.02] p-1.5 rounded-2xl border border-white/[0.06]">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-8 bg-white/[0.02] p-1.5 rounded-2xl border border-white/[0.06]">
           <button
             onClick={() => setCategory('school')}
             className={`py-2.5 px-3 rounded-xl text-xs font-semibold transition-all flex items-center justify-center gap-2 ${
@@ -143,7 +143,7 @@ export default function Setup() {
                 <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
                   1. Education Board
                 </label>
-                <div className="grid grid-cols-3 gap-1.5">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-1.5">
                   {boardsList.map((b) => (
                     <button
                       key={b}
@@ -361,7 +361,7 @@ export default function Setup() {
           <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
             Starting Difficulty Level
           </label>
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
             {diffs.map(({ label, icon: Icon, active }) => (
               <button
                 key={label}

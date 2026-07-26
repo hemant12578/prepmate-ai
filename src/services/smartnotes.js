@@ -112,6 +112,7 @@ ${textSample}`
     console.warn('generateDocSummary failed, using smart fallback:', e)
     const lines = textSample.split('\n').filter(l => l.trim().length > 20)
     return {
+      _isFallback: true,
       title: 'Notes Executive Summary',
       oneLiner: lines[0] || 'Summary generated from uploaded document notes.',
       keyPoints: lines.slice(1, 7).map(l => l.trim()),
@@ -146,8 +147,9 @@ ${textSample}`
     console.warn('generateFlashcards failed, using fallback cards:', e)
     const snippets = textSample.split(/\.\s+/).filter(s => s.trim().length > 30).slice(0, 6)
     return [
-      { front: 'What is the main topic of this document?', back: textSample.slice(0, 150) + '...', category: 'Overview' },
+      { _isFallback: true, front: 'What is the main topic of this document?', back: textSample.slice(0, 150) + '...', category: 'Overview' },
       ...snippets.map((snip, i) => ({
+        _isFallback: true,
         front: `Key Concept ${i + 1}`,
         back: snip.trim(),
         category: 'Concept Review'
