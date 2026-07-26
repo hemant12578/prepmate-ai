@@ -52,9 +52,19 @@ export default function ChatWithNotes({ docText }) {
           <Bot className="text-purple-400" size={20} />
           <h3 className="text-sm font-bold text-white">Document Q&A Assistant</h3>
         </div>
-        <span className="text-[10px] text-slate-400 bg-purple-500/10 px-2.5 py-1 rounded-full border border-purple-500/20">
-          Strictly Document-Based
-        </span>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setMessages([
+              { role: 'assistant', text: 'Hello! I am your AI Smart Assistant. Ask me anything directly based on your uploaded document notes.' }
+            ])}
+            className="text-[10px] text-slate-400 hover:text-purple-300 bg-white/5 hover:bg-purple-500/20 px-2.5 py-1 rounded-full border border-white/10 transition-colors"
+          >
+            Clear Chat
+          </button>
+          <span className="text-[10px] text-slate-400 bg-purple-500/10 px-2.5 py-1 rounded-full border border-purple-500/20 hidden sm:inline-block">
+            Strictly Document-Based
+          </span>
+        </div>
       </div>
 
       {/* Messages Scroll Area */}

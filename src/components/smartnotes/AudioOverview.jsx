@@ -66,14 +66,25 @@ export default function AudioOverview({ docText }) {
             <h3 className="text-base font-bold text-white">Audio Overview Player</h3>
           </div>
 
-          {/* Equalizer Waveform Animation */}
-          {isPlaying && (
-            <div className="flex items-end gap-1 h-5">
-              <div className="w-1 bg-purple-400 rounded-full animate-bounce h-full" />
-              <div className="w-1 bg-emerald-400 rounded-full animate-bounce h-3" style={{ animationDelay: '0.15s' }} />
-              <div className="w-1 bg-blue-400 rounded-full animate-bounce h-4" style={{ animationDelay: '0.3s' }} />
-            </div>
-          )}
+          <div className="flex items-center gap-3">
+            <button
+              onClick={handleGenerate}
+              className="px-3 py-1 rounded-full text-xs font-semibold bg-white/5 hover:bg-purple-500/20 border border-white/10 text-purple-300 flex items-center gap-1.5 transition-all"
+              title="Regenerate audio podcast script from sources"
+            >
+              <Sparkles size={12} className="text-purple-400" />
+              <span>Regenerate Script</span>
+            </button>
+
+            {/* Equalizer Waveform Animation */}
+            {isPlaying && (
+              <div className="flex items-end gap-1 h-5">
+                <div className="w-1 bg-purple-400 rounded-full animate-bounce h-full" />
+                <div className="w-1 bg-emerald-400 rounded-full animate-bounce h-3" style={{ animationDelay: '0.15s' }} />
+                <div className="w-1 bg-blue-400 rounded-full animate-bounce h-4" style={{ animationDelay: '0.3s' }} />
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Progress bar */}

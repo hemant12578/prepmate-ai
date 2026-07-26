@@ -145,13 +145,26 @@ export default function SmartNotes() {
                 </p>
               </div>
 
-              <button
-                onClick={() => setIsAddModalOpen(true)}
-                className="btn-primary px-5 py-2.5 rounded-2xl text-xs font-semibold text-white flex items-center gap-2 shadow-lg shadow-purple-500/20 shrink-0"
-              >
-                <Plus size={16} />
-                <span>+ Add Source</span>
-              </button>
+              <div className="flex items-center gap-2 shrink-0">
+                {selectedSourcesCount > 0 && (
+                  <button
+                    onClick={handleGenerateSummary}
+                    disabled={summaryLoading}
+                    className="px-4 py-2.5 rounded-2xl text-xs font-semibold bg-white/10 hover:bg-purple-500/20 border border-white/15 text-purple-200 flex items-center gap-2 transition-all shadow-md"
+                    title="Regenerate summary from selected sources"
+                  >
+                    <RotateCw size={14} className={summaryLoading ? 'animate-spin text-purple-400' : 'text-purple-400'} />
+                    <span>{summaryLoading ? 'Generating...' : 'Regenerate Summary'}</span>
+                  </button>
+                )}
+                <button
+                  onClick={() => setIsAddModalOpen(true)}
+                  className="btn-primary px-5 py-2.5 rounded-2xl text-xs font-semibold text-white flex items-center gap-2 shadow-lg shadow-purple-500/20 shrink-0"
+                >
+                  <Plus size={16} />
+                  <span>+ Add Source</span>
+                </button>
+              </div>
             </div>
           </div>
 

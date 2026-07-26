@@ -44,11 +44,21 @@ export default function SummaryView({ summary, loading, onGenerate }) {
             <Sparkles size={14} />
             <span>AI Executive Summary</span>
           </span>
-          {summary.difficulty && (
-            <span className="px-3 py-1 rounded-full text-xs font-semibold bg-purple-500/10 border border-purple-500/20 text-purple-300">
-              {summary.difficulty} Level
-            </span>
-          )}
+          <div className="flex items-center gap-2">
+            {summary.difficulty && (
+              <span className="px-3 py-1 rounded-full text-xs font-semibold bg-purple-500/10 border border-purple-500/20 text-purple-300">
+                {summary.difficulty} Level
+              </span>
+            )}
+            <button
+              onClick={onGenerate}
+              className="px-3 py-1 rounded-full text-xs font-semibold bg-white/5 hover:bg-purple-500/20 border border-white/10 text-slate-300 hover:text-purple-300 transition-all flex items-center gap-1.5"
+              title="Regenerate summary with current sources"
+            >
+              <Sparkles size={12} className="text-purple-400" />
+              <span>Regenerate Summary</span>
+            </button>
+          </div>
         </div>
         <h2 className="text-2xl font-bold text-white mb-2">{summary.title || 'Document Summary'}</h2>
         <p className="text-sm text-slate-300 italic leading-relaxed">{summary.oneLiner}</p>

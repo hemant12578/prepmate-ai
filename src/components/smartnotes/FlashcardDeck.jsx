@@ -67,11 +67,22 @@ export default function FlashcardDeck({ docText }) {
 
   return (
     <div className="animate-in max-w-xl mx-auto space-y-6">
-      {/* Top Progress */}
-      <div className="glass rounded-2xl p-4 flex items-center justify-between text-xs border border-white/5">
-        <span className="text-slate-400">Progress: <strong className="text-white">{gotItCount}/{totalCards} Mastered</strong></span>
-        <div className="w-32 bg-white/10 h-2 rounded-full overflow-hidden">
-          <div className="bg-gradient-to-r from-purple-500 to-emerald-400 h-full transition-all duration-300" style={{ width: `${progressPct}%` }} />
+      {/* Top Progress & Regenerate Bar */}
+      <div className="glass rounded-2xl p-4 flex items-center justify-between text-xs border border-white/5 gap-3">
+        <span className="text-slate-400 shrink-0">Progress: <strong className="text-white">{gotItCount}/{totalCards} Mastered</strong></span>
+        
+        <div className="flex items-center gap-3 shrink-0">
+          <div className="w-24 sm:w-32 bg-white/10 h-2 rounded-full overflow-hidden">
+            <div className="bg-gradient-to-r from-purple-500 to-emerald-400 h-full transition-all duration-300" style={{ width: `${progressPct}%` }} />
+          </div>
+          <button
+            onClick={handleGenerate}
+            className="px-3 py-1 rounded-full text-[11px] font-semibold bg-white/5 hover:bg-purple-500/20 border border-white/10 text-purple-300 flex items-center gap-1 transition-all"
+            title="Regenerate flashcards from sources"
+          >
+            <RotateCw size={12} />
+            <span>Regenerate Deck</span>
+          </button>
         </div>
       </div>
 
