@@ -44,7 +44,7 @@ export default function AudioOverview({ docText }) {
       <div className="glass rounded-3xl p-10 text-center animate-in">
         <Volume2 className="mx-auto mb-3 text-purple-400/60" size={36} />
         <h3 className="text-lg font-bold text-white mb-1">No Audio Overview Generated</h3>
-        <p className="text-xs text-slate-400 mb-6">Generate an engaging NotebookLM-style audio podcast summary of your notes.</p>
+        <p className="text-xs text-slate-400 mb-6">Generate an engaging AI audio podcast summary of your notes.</p>
         <button
           onClick={handleGenerate}
           className="btn-primary px-6 py-3 rounded-2xl text-xs font-semibold text-white inline-flex items-center gap-2 shadow-lg shadow-purple-500/20"

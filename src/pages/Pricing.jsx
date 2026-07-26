@@ -99,7 +99,7 @@ export default function Pricing() {
       priceMonthly: '₹199',
       priceAnnual: '₹149',
       period: '/month (~$2.4)',
-      desc: 'Supercharge your learning with unlimited questions and NotebookLM Smart Notes.',
+      desc: 'Supercharge your learning with unlimited questions and PrepMate Smart Notes.',
       buttonText: 'Start Free Trial →',
       buttonBg: 'btn-primary text-white shadow-xl shadow-purple-500/30 hover:scale-[1.02]',
       popular: true,
@@ -208,7 +208,7 @@ export default function Pricing() {
           Invest in Your <span className="text-gradient">Academic Success</span>
         </h1>
         <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
-          Choose the plan that fits your learning goals. Supercharge your prep with unlimited AI question generation, NotebookLM Smart Notes, and voice interview simulation.
+          Choose the plan that fits your learning goals. Supercharge your prep with unlimited AI question generation, PrepMate Smart Notes, and voice interview simulation.
         </p>
 
         {/* Billing Toggle */}

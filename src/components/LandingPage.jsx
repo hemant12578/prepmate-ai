@@ -93,7 +93,7 @@ export default function LandingPage() {
       a: 'Yes! PrepMate AI features built-in Web Speech API voice recognition. Speak your responses naturally, and the app transcribes them for real-time evaluation.'
     },
     {
-      q: 'What is NotebookLM Smart Notes?',
+      q: 'What is PrepMate Smart Notes?',
       a: 'Smart Notes allows you to upload PDFs, paste text notes, upload textbook photos (OCR), or paste YouTube links to create summaries, 3D flashcards, chat, and audio overview podcasts.'
     },
     {
@@ -111,7 +111,7 @@ export default function LandingPage() {
     },
     {
       icon: FileText,
-      title: 'NotebookLM Sources Hub',
+      title: 'PrepNotes Sources Hub',
       desc: 'Upload PDFs, paste notes, add YouTube videos — AI analyses all sources combined.',
       color: 'bg-teal-500/20 text-teal-400',
     },
@@ -132,7 +132,7 @@ export default function LandingPage() {
   const allFeatures = [
     { icon: BookOpen, title: 'Adaptive Study Mode', desc: 'Practice Class 5-12+ board exams with PYQ styles, 4-option MCQs, True/False, concept explanations, and memory tricks.' },
     { icon: Briefcase, title: 'Interview Simulator', desc: 'Simulate School Vivas, College Entrance Interviews, or Job Interviews with 90s Pressure Mode countdown.' },
-    { icon: FileText, title: 'NotebookLM Sources Hub', desc: 'Upload PDFs, notes, YouTube video lectures, or textbook photos via Tesseract OCR to learn across all sources.' },
+    { icon: FileText, title: 'PrepNotes Sources Hub', desc: 'Upload PDFs, notes, YouTube video lectures, or textbook photos via Tesseract OCR to learn across all sources.' },
     { icon: Mic, title: 'Voice Speech Recognition', desc: 'Speak your answers out loud with native Web Speech API recognition for true-to-life interview practice.' },
     { icon: Award, title: '3-Bar Rubric Evaluation', desc: 'Detailed breakdown of Content Accuracy, Communication Clarity, Structure, and STAR format check.' },
     { icon: Server, title: 'Enterprise Multi-Model AI', desc: 'Automated OpenRouter failover chain across LLaMA, Gemma, and auto models for 99.99% uptime.' },
@@ -299,7 +299,7 @@ export default function LandingPage() {
             className="text-sm sm:text-lg md:text-xl text-gray-400 mb-8 sm:mb-10 max-w-2xl mx-auto leading-relaxed px-2"
           >
             Adaptive study practice, 90s pressure interview simulations,
-            NotebookLM multi-source analysis, and voice recognition —
+            PrepNotes multi-source analysis, and voice recognition —
             all in one AI platform.
           </motion.p>
 
@@ -516,7 +516,7 @@ export default function LandingPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {[
             { text: '"The voice input and STAR format feedback helped me refine my answers for technical HR rounds. I landed my Frontend Engineer role!"', name: 'Alex R.', role: 'Software Engineer' },
-            { text: '"NotebookLM Smart Notes parsed my PDF textbook and created 3D flashcards instantly. The CBSE PYQ mode is incredible."', name: 'Priya M.', role: 'Class 10 CBSE Student' },
+            { text: '"PrepMate Smart Notes parsed my PDF textbook and created 3D flashcards instantly. The CBSE PYQ mode is incredible."', name: 'Priya M.', role: 'Class 10 CBSE Student' },
             { text: '"The 90s Pressure Mode timer makes mock interviews feel like real corporate interview rounds. Best free prep coach!"', name: 'David K.', role: 'Data Analyst Candidate' },
           ].map((t, i) => (
             <motion.div

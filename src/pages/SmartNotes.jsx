@@ -135,7 +135,7 @@ export default function SmartNotes() {
               <div>
                 <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full glass-light text-xs text-purple-300 mb-2 border border-purple-500/20">
                   <Sparkles size={12} />
-                  <span>Multi-Source NotebookLM AI Engine</span>
+                  <span>Multi-Source PrepNotes AI Engine</span>
                 </div>
                 <h1 className="text-2xl font-bold text-white mb-1">Smart Notes Workspace</h1>
                 <p className="text-xs text-slate-400">

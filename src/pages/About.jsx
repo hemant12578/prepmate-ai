@@ -67,7 +67,7 @@ export default function About() {
       color: 'text-emerald-400',
       bg: 'bg-emerald-500/10 border-emerald-500/20',
       gradient: 'from-[#081f13] to-[#040e09]',
-      title: 'NotebookLM Multi-Source Hub & OCR',
+      title: 'PrepNotes Multi-Source Hub & OCR',
       desc: 'Upload custom PDFs, class notes, or textbook photos via client-side Tesseract.js OCR to generate combined AI summaries, 3D flashcards, chat, and audio podcasts.'
     },
     {
@@ -149,7 +149,7 @@ export default function About() {
               <span className="text-gradient">AI Education</span>
             </h1>
             <p className="text-slate-300 text-xs sm:text-sm md:text-base leading-relaxed max-w-xl">
-              PrepMate AI combines 3D interactive graphics, Exam Mode PYQ analysis, official NCERT textbook integration, real-time rubric scoring, NotebookLM-style multi-source analysis, and corporate interview pressure simulation into a single, accessible platform.
+              PrepMate AI combines 3D interactive graphics, Exam Mode PYQ analysis, official NCERT textbook integration, real-time rubric scoring, PrepNotes multi-source analysis, and corporate interview pressure simulation into a single, accessible platform.
             </p>
           </div>
 

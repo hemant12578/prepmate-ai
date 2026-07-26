@@ -187,7 +187,7 @@ export default function Home() {
       iconColor: 'text-emerald-400',
       title: 'Smart Notes',
       description: 'Upload PDFs, paste text notes, photos of textbook pages (OCR), or YouTube links to generate multi-source summaries, 3D flashcards, chat, and audio podcasts.',
-      badge: 'NotebookLM Hub',
+      badge: 'PrepNotes Hub',
       badgeBg: 'bg-emerald-900/80 text-emerald-200 border-emerald-400/30',
       image: '/assets/smart_notes.jpg',
       checkColor: 'text-emerald-400',

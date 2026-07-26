@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <em>Adaptive practice questions · Structured AI feedback · Multi-source smart notes · Voice-interactive interviews</em>
+  <em>Adaptive practice questions · Structured AI feedback · PrepNotes multi-source analysis · Voice-interactive interviews</em>
 </p>
 
 <p align="center">
@@ -57,7 +57,7 @@
 |------|-------------|
 | **📚 Study Mode** | Generates adaptive MCQ + subjective questions from any NCERT chapter, custom topic, uploaded PDF, or OCR-scanned image. AI evaluates answers with detailed feedback and adjusts difficulty dynamically. |
 | **🎤 Interview Mode** | Simulates real job, college admission, and school viva interviews with voice input, pressure timer, and AI-generated structured feedback with scoring rubrics. |
-| **📝 Smart Notes** | A NotebookLM-style workspace — upload PDFs, images, paste text, or YouTube transcripts. AI generates executive summaries, interactive flashcard decks, document Q&A chat, and podcast-style audio overviews. |
+| **📝 Smart Notes** | PrepNotes multi-source workspace — upload PDFs, images, paste text, or YouTube transcripts. AI generates executive summaries, interactive flashcard decks, document Q&A chat, and podcast-style audio overviews. |
 
 > Built as a solo developer project for **InnovaHack Chapter 1** hackathon — scoring **95.5/100** in the final evaluation.
 
