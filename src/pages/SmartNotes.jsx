@@ -31,7 +31,20 @@ export default function SmartNotes() {
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false)
 
   const [activeTab, setActiveTab] = useState('summary') // 'summary', 'flashcards', 'chat', 'audio'
-  const [summary, setSummary] = useState(null)
+  const [summary, setSummary] = useState(() => {
+    try {
+      const saved = localStorage.getItem('prepmate_smartnotes_summary')
+      if (!saved) return null
+      const parsed = JSON.parse(saved)
+      if (parsed._isFallback) {
+        localStorage.removeItem('prepmate_smartnotes_summary')
+        return null
+      }
+      return parsed
+    } catch (e) {
+      return null
+    }
+  })
   const [summaryLoading, setSummaryLoading] = useState(false)
   const [error, setError] = useState(null)
 
